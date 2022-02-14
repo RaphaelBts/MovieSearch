@@ -8,16 +8,16 @@ You will be able to ask him questions like:
 ## Tasks
 
 - [x] Choose between Python and Node for development. --> Python
-- [] Website that will host our chatbot (Discord, Facebook, Google, ...) ?
-- [] How to collect movies data ? (API, Webcrapping, ...) ? 
+- [ ] Website that will host our chatbot (Discord, Facebook, Google, ...) ?
+- [ ] How to collect movies data ? (API, Webcrapping, ...) ? 
 Possible API: https://www.cinemaspathegaumont.com/api/show/les-vedettes/showtimes/cinema-pathe-dammarie/2022-02-14?language=fr
-- [] Where to collect them (Gaumont, UGC, ...) ?  
-- [] How to store them (if needed) ?
-- [] Enumerate different possibles requests (API)
-- [] Test with a simple chatbot.
-- [] Improve the chatbot-user experience.
-- [] Implement recommendation system based on items vs items.
-- [] Bonus: add questions about preferences for recommender system content-based.
+- [ ] Where to collect them (Gaumont, UGC, ...) ?  
+- [ ] How to store them (if needed) ?
+- [ ] Enumerate different possibles requests (API)
+- [ ] Test with a simple chatbot.
+- [ ] Improve the chatbot-user experience.
+- [ ] Implement recommendation system based on items vs items.
+- [ ] Bonus: add questions about preferences for recommender system content-based.
 
 
 ## Resources
