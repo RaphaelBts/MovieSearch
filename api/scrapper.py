@@ -2,8 +2,6 @@
 import requests
 from requests.exceptions import HTTPError
 
-URL = 'https://www.cinemaspathegaumont.com/api/show/uncharted/showtimes/cinema-pathe-dammarie'
-
 def scrappe(url):
     try:
         response = requests.get(url)
@@ -16,6 +14,3 @@ def scrappe(url):
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:
         print(f'Other error occurred: {err}')
-
-res = scrappe(URL)
-print(res)

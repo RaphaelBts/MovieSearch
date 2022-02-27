@@ -1,0 +1,2 @@
+from patterns import patternDict
+

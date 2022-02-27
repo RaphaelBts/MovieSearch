@@ -11,9 +11,15 @@ async def on_ready():
 @client.event
 async def on_member_join(member):
     await member.create_dm()
-    await member.dm_channel.send(
-        f'Hi {member.name}, welcome to my Discord server!'
-    )
+    await member.dm_channel.send(f'Hi {member.name}, welcome to my Discord server!')
+    
+@client.event 
+async def on_message(message):
+    if message.author == client.user:
+        return 
+        
+    if message.content == "Commands":
+        await message.channel.send(" Differents users requets can be made /n")
 
 @client.event
 async def on_message(message):
