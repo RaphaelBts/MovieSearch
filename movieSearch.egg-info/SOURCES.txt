@@ -1,0 +1,6 @@
+README.md
+setup.py
+movieSearch.egg-info/PKG-INFO
+movieSearch.egg-info/SOURCES.txt
+movieSearch.egg-info/dependency_links.txt
+movieSearch.egg-info/top_level.txt
