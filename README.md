@@ -8,7 +8,7 @@ You will be able to ask him questions like:
 ## Tasks
 
 - [x] Choose between Python and Node for development. --> Python
-- [ ] Website that will host our chatbot (Discord, Facebook, Google, ...) ?
+- [x] Website or Application that will host our chatbot (Discord, Facebook, Google, ...) --> Discord
 - [ ] How to collect movies data ? (API, Webcrapping, ...) ? 
 - [ ] Where to collect them (Gaumont, UGC, ...) ?  
 - [ ] How to store them (if needed) ?
@@ -18,6 +18,13 @@ You will be able to ask him questions like:
 - [ ] Implement recommendation system based on items vs items.
 - [ ] Bonus: add questions about preferences for recommender system content-based.
 - [ ] Bonus: Reservation system
+
+## Packages and librairies
+
+Packages to install : discord.py
+```
+pip install discord.py
+```
 
 
 ## Resources
