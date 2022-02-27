@@ -31,6 +31,9 @@ pip install discord.py
 
 - Discord bot in Python: https://www.youtube.com/watch?v=SLd4d5EqbiM
 - Gaumont API: 
-<br> Showtimes of a movie in a specific movie theater and date: https://www.cinemaspathegaumont.com/api/show/les-vedettes/showtimes/cinema-pathe-dammarie/2022-02-14?language=fr
-<br>All movie theaters: https://www.cinemaspathegaumont.com/api/cinemas?language=fr
+<br>Showtimes of a movie in a specific movie theater: https://www.cinemaspathegaumont.com/api/show/uncharted/showtimes/cinema-pathe-dammarie
+<br> Showtimes of a movie in a specific movie theater and date: https://www.cinemaspathegaumont.com/api/show/les-vedettes/showtimes/cinema-pathe-dammarie/2022-02-14
+<br>All movie theaters: https://www.cinemaspathegaumont.com/api/cinemas
 <br>Info on a specific movie: https://www.cinemaspathegaumont.com/api/show/uncharted
+<br>Cinemas where a specific movie is shown: https://www.cinemaspathegaumont.com/api/show/uncharted/cinemas
+
