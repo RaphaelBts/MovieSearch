@@ -27,6 +27,17 @@ Packages to install : discord.py
 pip install discord.py
 ```
 
+Build the movieSearch package:
+```
+pip install -e .
+```
+
+Run the bot with
+```
+python bot/bot.py
+or
+python3 bot/bot.py
+```
 
 ## Resources
 
