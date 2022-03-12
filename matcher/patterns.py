@@ -1,16 +1,83 @@
 patternList = [
     {
-        "pattern" : '\\b(?P<greeting>Hi|Hello|Hey|Good morning|Good afternoon)\\b',
-        "intent" : 'Hello'
+        'pattern' : '\\b(?P<greeting>[H-h]i|[H-h]ello|[H-h]ey|[G-g]ood morning|[G-g]ood afternoon)\\b',
+        'intent' : 'Hello'
     }, 
     {
-        "pattern" :'\\b(bye|exit|finish|end|stop)\\b',
-        "intent" : 'Exit'
+        'pattern' :'\\b(bye|exit|finish|end|stop)\\b',
+        'intent' : 'Exit'
     },
     {
-        "pattern" : '\\b(Help|Helps|Aide|Aides)\\b',
-        "intent" : 'Help'
-    }]
+        'pattern' : '\\b(Help|Helps|Aide|Aides)\\b',
+        'intent' : 'Help'
+    },
+
+
+    {
+        'pattern': '(.*\\s[I-i]nfo(s)?|[I-i]nformation(s)?)\\s(about|on)\\s(the\\s(film(s)?|movie(s)?)\\s)?(?P<moviename>\\w+(\\s\\w+)*)',
+        'intent': 'Movie info'
+    },
+    {
+        'pattern':'(?P<type>.*)([F-f]ilm(s)?|[M-m]ovie(s)?)',
+        'intent': 'Movie by type'
+    },
+    {
+        'pattern':'',
+        'intent': 'Films joue/dirige par x'
+    },
+    {
+        'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s(available|on\\sscreen)\\s(in\\s)?(?P<date>today|now|currently)',
+        'intent': 'Films dispo ajd' # authorized date : today, now
+    },
+    {
+        'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s(available|on\\sscreen)\\s(in\\s)?(?P<date>\\d*)\\s(?P<detail>days|hours)',
+        'intent': 'Films dispo jour x' # authorized date : in x days (maximum 14 days), in x hours (maximum 24 hours)
+    },
+    {
+        'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s(available|on\\sscreen)\\s(in\\s)?(?P<date>\\d*)\\s(?P<detail>days|hours)\\s(in\\s)?(?P<location>\\w+(\\s\\w+)*)',
+        'intent': 'Films dispo jour x avec localisation y' # authorized date : in x days (maximum 14 days), in x hours (maximum 24 hours)
+    },
+    {
+        'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s(available|on\\sscreen)\\s(in\\s)?(?P<location>\\w+(\\s\\w+)*)\\s(?P<time>now|today|currently)',
+        'intent': 'Films dispo localisation x ajd'
+    },
+    {
+        'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s(available|on\\sscreen)\\s(in\\s)?(?P<location>\\w+(\\s\\w+)*)',
+        'intent': 'Films dispo localisation x' # date : today only
+    },
+
+
+    # {
+    #     'pattern':'',
+    #     'intent': 'Seances cinema x'
+    # },
+    # {
+    #     'pattern':'',
+    #     'intent': 'Seances localisation x'
+    # },
+    # {
+    #     'pattern':'',
+    #     'intent': 'Seances cinema x film y'
+    # },
+    # {
+    #     'pattern':'',
+    #     'intent': 'Seances localisation x film y'
+    # },
+
+
+    # {
+    #     'pattern':'',
+    #     'intent': 'Event'
+    # },
+    # {
+    #     'pattern':'',
+    #     'intent': 'Prochaines sorties'
+    # },
+    # {
+    #     'pattern':'',
+    #     'intent': 'Prochaines seances tout film confondu aujourd\'hui'
+    # },
+    ]
 
     
 #     # Current Weather 4 "pattern"s

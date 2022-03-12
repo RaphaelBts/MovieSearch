@@ -1,4 +1,16 @@
-from scrapper import scrappe
+from api.scrapper import scrappe
+
+def apiSearch(search, api="https://www.cinemaspathegaumont.com/api"):
+    url = f'{api}/search/quick?q={search}'
+    resList = scrappe(url)
+    bestMatch = ''
+    for res in resList:
+        if res['type'] == 'show' and res['isMovie']:
+            print(res['slug'], res['title'])
+            bestMatch = res['slug']
+            break
+    return bestMatch
+    
 
 def getMovieInfos(movieName, api="https://www.cinemaspathegaumont.com/api"):
     url = f'{api}/show/{movieName}'
@@ -15,7 +27,7 @@ def getMovieShowtimes(movieName, theaterName, api="https://www.cinemaspathegaumo
 def getAllShows(api="https://www.cinemaspathegaumont.com/api"):
     url = f'{api}/shows'
     res = scrappe(url)
-    return res
+    return res[0]
 
 
 def getAllMovieTheaters(api="https://www.cinemaspathegaumont.com/api"):
@@ -31,5 +43,7 @@ def getAllMovieTheaters(api="https://www.cinemaspathegaumont.com/api"):
 
 # showtimes = getMovieShowtimes('uncharted', 'cinema-gaumont-alesia')
 # print(showtimes)
+
+# apiSearch('The Batman')
 
 #endregion
