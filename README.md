@@ -50,4 +50,6 @@ python3 bot/bot.py
 <br>All movie theaters: https://www.cinemaspathegaumont.com/api/cinemas
 <br>Info on a specific movie: https://www.cinemaspathegaumont.com/api/show/uncharted
 <br>Cinemas where a specific movie is shown: https://www.cinemaspathegaumont.com/api/show/uncharted/cinemas
+<br> films bookable in paris https://www.cinemaspathegaumont.com/api/zone/paris
+<br> nouveauté (mise en exergue par le site) https://www.cinemaspathegaumont.com/api/footer?
 
