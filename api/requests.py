@@ -6,7 +6,6 @@ def apiSearch(search, api="https://www.cinemaspathegaumont.com/api"):
     bestMatch = ''
     for res in resList:
         if res['type'] == 'show' and res['isMovie']:
-            print(res['slug'], res['title'])
             bestMatch = res['slug']
             break
     return bestMatch
@@ -27,13 +26,19 @@ def getMovieShowtimes(movieName, theaterName, api="https://www.cinemaspathegaumo
 def getAllShows(api="https://www.cinemaspathegaumont.com/api"):
     url = f'{api}/shows'
     res = scrappe(url)
-    return res[0]
+    return res["shows"]
 
 
 def getAllMovieTheaters(api="https://www.cinemaspathegaumont.com/api"):
     url = f'{api}/cinemas'
     res = scrappe(url)
     return res
+
+
+def getShowsZone(zone, api="https://www.cinemaspathegaumont.com/api"):
+    url = f'{api}/zone/{zone}'
+    res = scrappe(url)
+    return res["shows"]
 
 
 #region tests

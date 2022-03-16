@@ -52,4 +52,7 @@ python3 bot/bot.py
 <br>Cinemas where a specific movie is shown: https://www.cinemaspathegaumont.com/api/show/uncharted/cinemas
 <br> films bookable in paris https://www.cinemaspathegaumont.com/api/zone/paris
 <br> nouveauté (mise en exergue par le site) https://www.cinemaspathegaumont.com/api/footer?
+<br> https://www.cinemaspathegaumont.com/api/gpxp/imax
+<br> inutile: https://www.cinemaspathegaumont.com/api/tags?language=frw
+<br> https://www.cinemaspathegaumont.com/api/search/quick?q=batman //full 
 

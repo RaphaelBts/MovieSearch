@@ -24,8 +24,34 @@ async def on_message(message):
         return
 
     response = botResponse(message.content)
-    print(f'<{response}> has been send to Discord!')
-    await message.channel.send(response)
 
+    response = response[:5000]
+    # chunks = getChunks(response)
+    # for chunk in chunks:
+    #     print(len(chunk))
+    #     await message.channel.send(chunk)
+    
+    await message.channel.send(response)
+    print(f'<{len(response)}> characters has been send to Discord!')
+
+def getChunks(text, chunksize=2000):
+    chunks = []
+    block = []
+    line = []
+
+    for ptr in range(len(text)):
+        line += text[ptr]
+        if text[ptr] == '\n':
+            if len(block + line) < chunksize:
+                block += line
+                line = []
+            else:
+                chunks.append(block)
+                block = line
+
+        if ptr == len(text):
+            chunks.append(block)
+
+    return chunks
 
 client.run(TOKEN)

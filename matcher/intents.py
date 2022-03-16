@@ -1,7 +1,19 @@
 import re
 
 from matcher.patterns import patternList
-from matcher.responses import Default, Hello, Exit, Help, MovieInfos, MovieByType
+from matcher.responses import (
+    Default, 
+    Hello, 
+    Exit, 
+    Help, 
+    MovieInfos, 
+    MovieByType, 
+    MoviesComingSoon, 
+    Events, 
+    ListGenres,
+    MoviesByActor,
+    MoviesByDirector,
+    TodayFilmByLocation)
 
 
 def getIntent(message):
@@ -15,6 +27,25 @@ def getIntent(message):
     # if no match by the regular expression, return default message and default dict
     return "Default", {}
 
+def getResponse(intent, namedGroups):
+
+    # dictionnary with intent as key and response message as value
+    responseDict = {
+        'Default': Default(),
+        'Hello': Hello(namedGroups) if 'greeting' in namedGroups.keys() else None,
+        'Exit': Exit(),
+        'Help': Help(),
+        'Movie info': MovieInfos(namedGroups) if 'moviename' in namedGroups.keys() else None,
+        'Movie by type': MovieByType(namedGroups) if 'type' in namedGroups.keys() else None,
+        'Coming soon': MoviesComingSoon(),
+        'Event': Events(),
+        'List of genres': ListGenres(),
+        'Movie by actor': MoviesByActor(namedGroups) if 'actor' in namedGroups.keys() else None,
+        'Movie by director': MoviesByDirector(namedGroups) if 'director' in namedGroups.keys() else None,
+        'Available films today by location': TodayFilmByLocation(namedGroups) if 'location' in namedGroups.keys() else None
+    }
+
+    return responseDict.get(intent)
 
 def botResponse(message):
 
@@ -24,20 +55,5 @@ def botResponse(message):
 
     # get the response
     response = getResponse(intent, namedGroup)
-    print(response)
 
     return response
-
-def getResponse(intent, namedGroups):
-
-    # dictionnary with intent as key and response message as value
-    responseDict = {
-        'Default': Default(),
-        'Hello': Hello(namedGroups.get("greeting")),
-        'Exit': Exit(),
-        'Help': Help(),
-        'Movie info': MovieInfos(namedGroups.get("moviename")),
-        'Movie by type': MovieByType(namedGroups.get("type"))
-    }
-
-    return responseDict.get(intent)
