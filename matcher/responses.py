@@ -1,11 +1,13 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+import re
 import requests
 
 import json
 from jsonpath_ng.ext import parse
 import jsonpath
 
-from api.requests import apiSearch, getMovieInfos, getAllShows, getShowsZone
+from api.requests import apiSearch, getMovieInfos, getAllShows, getShowsZone, getAllMovieTheaters, getMovieShowtimes
+from api.requests import CITY_LIST, CINEMA_DICT
 
 def Default():
     return 'I did not get your intent. Please try again.'
@@ -116,14 +118,52 @@ def MoviesByDirector(namedGroups):
     return res + '\n'.join(movieTitles)
     
 
-def TodayFilmByLocation(namedGroups):
+def TodayFilmsByLocation(namedGroups):
     location = namedGroups.get("location").lower()
-    all_shows = getShowsZone(location)
+    shows = getShowsZone(location)
 
-    movieTitles = [mov["slug"] for mov in all_shows if mov["bookable"]]
+    movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
 
     res = f'Movies available today in {location}:\n' 
     return res + '\n'.join(movieTitles)
+
+
+def FilmsByLocationinNbDays(namedGroups):
+    location = namedGroups.get("location").lower()
+    date = namedGroups.get("date")
+    details = namedGroups.get("detail")
+    formatDate = getTimeDateWeek(int(date), details)
+
+    shows = getShowsZone(location)
+    movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
+
+    if details == "days":
+        showsInfoDict = {
+            movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
+            for movieName in movieTitles
+        }
+    
+    res = f'Movies available in {date} {details} in {location}:\n' 
+    for mov in showsInfoDict.keys():
+        res += mov + '\t'
+        for theater in showsInfoDict[mov].keys():
+            res += theater + '\t'
+            res += ', '.join(list(map(lambda x: x["time"], showsInfoDict[mov][theater])))
+            res += '\n'
+
+    print(res)
+    return res
+
+
+def getTimeDateWeek(number, details):
+    res = ""
+
+    if details == "days":
+        res = (datetime.today().date() + timedelta(days=number)).strftime("%Y-%m-%d")
+    
+    return res
+
+        
 
 
 def ListGenres():

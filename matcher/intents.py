@@ -13,7 +13,8 @@ from matcher.responses import (
     ListGenres,
     MoviesByActor,
     MoviesByDirector,
-    TodayFilmByLocation)
+    TodayFilmsByLocation,
+    FilmsByLocationinNbDays)
 
 
 def getIntent(message):
@@ -42,7 +43,8 @@ def getResponse(intent, namedGroups):
         'List of genres': ListGenres(),
         'Movie by actor': MoviesByActor(namedGroups) if 'actor' in namedGroups.keys() else None,
         'Movie by director': MoviesByDirector(namedGroups) if 'director' in namedGroups.keys() else None,
-        'Available films today by location': TodayFilmByLocation(namedGroups) if 'location' in namedGroups.keys() else None
+        'Available films today by location': TodayFilmsByLocation(namedGroups) if 'location' in namedGroups.keys() else None,
+        'Films dispo dans x jour/heure à la localisation y' : FilmsByLocationinNbDays(namedGroups)
     }
 
     return responseDict.get(intent)

@@ -1,6 +1,8 @@
 import discord
 from matcher.intents import botResponse
 
+import time
+
 
 TOKEN = "OTQ3NDYyNjQxOTMxMTQ1MjQ3.YhtnWA.tn7agP_In8cM3O7GFOoC8TmEqdI"
 
@@ -26,10 +28,12 @@ async def on_message(message):
     response = botResponse(message.content)
 
     response = response[:5000]
-    # chunks = getChunks(response)
-    # for chunk in chunks:
-    #     print(len(chunk))
-    #     await message.channel.send(chunk)
+    chunks = getChunks(response)
+    for chunk in chunks:
+        print(len(chunk))
+        print(chunk)
+        await message.channel.send(chunk)
+        time.sleep(2)
     
     await message.channel.send(response)
     print(f'<{len(response)}> characters has been send to Discord!')
@@ -46,11 +50,11 @@ def getChunks(text, chunksize=2000):
                 block += line
                 line = []
             else:
-                chunks.append(block)
+                chunks.append(''.join(block))
                 block = line
 
         if ptr == len(text):
-            chunks.append(block)
+            chunks.append(''.join(block))
 
     return chunks
 

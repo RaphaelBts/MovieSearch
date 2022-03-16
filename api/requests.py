@@ -17,8 +17,10 @@ def getMovieInfos(movieName, api="https://www.cinemaspathegaumont.com/api"):
     return res
 
 
-def getMovieShowtimes(movieName, theaterName, api="https://www.cinemaspathegaumont.com/api"):
+def getMovieShowtimes(movieName, theaterName, api="https://www.cinemaspathegaumont.com/api", date=""):
     url = f'{api}/show/{movieName}/showtimes/{theaterName}'
+    if date != "":
+        url += f'/{date}'
     res = scrappe(url)
     return res
 
@@ -47,7 +49,7 @@ CITY_LIST = [
 ]
 
 # Dictionary with cities as keys and the list of related movie theaters as values
-CINEMA_LIST = {
+CINEMA_DICT = {
     city : sorted([cinema["slug"] for cinema in getAllMovieTheaters() if cinema["citySlug"] == city])
     for city in CITY_LIST
 }
@@ -57,8 +59,8 @@ CINEMA_LIST = {
 # genres = getMovieInfos('uncharted')['genres']
 # print(genres)
 
-showtimes = getMovieShowtimes('uncharted', 'cinema-gaumont-alesia')
-print(showtimes)
+# showtimes = getMovieShowtimes('uncharted', 'cinema-gaumont-alesia')
+# print(showtimes)
 
 # apiSearch('The Batman')
 
