@@ -40,14 +40,25 @@ def getShowsZone(zone, api="https://www.cinemaspathegaumont.com/api"):
     res = scrappe(url)
     return res["shows"]
 
+# List of all the cities available in gaumont api
+CITY_LIST = [
+    city
+    for city in sorted(list(set(list(map(lambda x: x["citySlug"], getAllMovieTheaters())))))
+]
+
+# Dictionary with cities as keys and the list of related movie theaters as values
+CINEMA_LIST = {
+    city : sorted([cinema["slug"] for cinema in getAllMovieTheaters() if cinema["citySlug"] == city])
+    for city in CITY_LIST
+}
 
 #region tests
 
 # genres = getMovieInfos('uncharted')['genres']
 # print(genres)
 
-# showtimes = getMovieShowtimes('uncharted', 'cinema-gaumont-alesia')
-# print(showtimes)
+showtimes = getMovieShowtimes('uncharted', 'cinema-gaumont-alesia')
+print(showtimes)
 
 # apiSearch('The Batman')
 
