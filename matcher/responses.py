@@ -83,7 +83,7 @@ def MoviesComingSoon():  # 24  6 mois c'est assez
     moviesOrder = dict() 
     for mov in movies : 
         moviesOrder[mov["title"]]=mov["releaseAt"][0]
-        moviesOrdered = OrderedDict(sorted(moviesOrder.items(), key = lambda x:datetime.strptime(x[1], '%d-%m-%Y'), reverse=True))
+        moviesOrdered = OrderedDict(sorted(moviesOrder.items(), key = lambda x:datetime.strptime(x[1], "%Y-%m-%d"), reverse=True))
     movieTitles = []
     for titles,releaseDate in moviesOrdered.items():
         movieTitles.append(titles)
@@ -135,7 +135,7 @@ def TodayFilmsByLocation(namedGroups):
     return res + '\n'.join(movieTitles)
 
 
-def FilmsByLocationinNbDays(namedGroups):
+def ShowtimesByLocationinNbDays(namedGroups):
     location = namedGroups.get("location").lower()
     date = namedGroups.get("date")
     details = namedGroups.get("detail")
@@ -150,15 +150,14 @@ def FilmsByLocationinNbDays(namedGroups):
             for movieName in movieTitles
         }
     
-    res = f'Movies available in {date} {details} in {location}:\n' 
+    res = f'Movies available in {date} {details} ( {formatDate} ) in {location}:\n' 
     for mov in showsInfoDict.keys():
-        res += mov + '\t'
+        res += mov + '\n :'
         for theater in showsInfoDict[mov].keys():
-            res += theater + '\t'
-            res += ', '.join(list(map(lambda x: x["time"], showsInfoDict[mov][theater])))
+            res += '\t--> ' + theater + ' --> '
+            res += ', '.join(list(map(lambda x: str(datetime.strptime(x["time"], "%Y-%m-%d %H:%M:%S").time()), showsInfoDict[mov][theater])))
             res += '\n'
-
-    print(res)
+        
     return res
 
 

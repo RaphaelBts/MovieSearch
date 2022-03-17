@@ -10,11 +10,11 @@ from matcher.responses import (
     MovieByType, 
     MoviesComingSoon, 
     Events, 
-    ListGenres,
+    # ListGenres,
     MoviesByActor,
     MoviesByDirector,
     TodayFilmsByLocation,
-    FilmsByLocationinNbDays)
+    ShowtimesByLocationinNbDays)
 
 ##genres = ListGenres()
 
@@ -39,13 +39,13 @@ def getResponse(intent, namedGroups):
         'Help': Help(),
         'Movie info': MovieInfos(namedGroups) if 'moviename' in namedGroups.keys() else None,
         'Movie by type': MovieByType(namedGroups) if 'type' in namedGroups.keys() else None,
-        'Coming soon': MoviesComingSoon(),
+        # 'Coming soon': MoviesComingSoon(),
         'Event': Events(),
         'List of genres': 'merde',
         'Movie by actor': MoviesByActor(namedGroups) if 'actor' in namedGroups.keys() else None,
         'Movie by director': MoviesByDirector(namedGroups) if 'director' in namedGroups.keys() else None,
         'Available films today by location': TodayFilmsByLocation(namedGroups) if 'location' in namedGroups.keys() else None,
-        'Films dispo dans x jour/heure à la localisation y' : FilmsByLocationinNbDays(namedGroups)
+        'Films dispo dans x jour/heure à la localisation y' : ShowtimesByLocationinNbDays(namedGroups)
     }
 
     return responseDict.get(intent)
