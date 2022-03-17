@@ -15,8 +15,8 @@ def Default():
     return 'I did not get your intent. Please try again.'
 
 
-def Hello(namedGroup):
-    greeting = namedGroup.get("greeting")
+def Hello(namedGroups={}):
+    greeting = (namedGroups.get("greeting") if namedGroups.get("greeting") is not None else "")
     return f'{greeting} you !'
 
 
@@ -28,9 +28,9 @@ def Help():
     return 'How can I help you ?'
 
 
-def MovieInfos(namedGroups):
+def MovieInfos(namedGroups={}):
 
-    movie = namedGroups.get("moviename")
+    movie = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "")
     infos = getMovieInfos(apiSearch(movie))
 
     title = infos['title']
@@ -43,9 +43,9 @@ def MovieInfos(namedGroups):
 
 
 #region MovieByType (genre or new movies)
-def MovieByType(namedGroups):
+def MovieByType(namedGroups={}):
 
-    movieType = namedGroups.get("type")
+    movieType = (namedGroups.get("type") if namedGroups.get("type") is not None else "")
     genresList = ['Fantaisie',] # get the genre list -> a completer
 
     if movieType in genresList:
@@ -100,8 +100,8 @@ def Events():
     return res + '\n'.join(movieTitles)
 
 
-def MoviesByActor(namedGroups):
-    actor = namedGroups.get("actor")
+def MoviesByActor(namedGroups={}):
+    actor = (namedGroups.get("actor") if namedGroups.get("actor") is not None else "")
     all_shows = getAllShows()
     movies = [
         mov 
@@ -114,8 +114,8 @@ def MoviesByActor(namedGroups):
     return res + '\n'.join(movieTitles)
 
 
-def MoviesByDirector(namedGroups):
-    director = namedGroups.get("director")
+def MoviesByDirector(namedGroups={}):
+    director = (namedGroups.get("director") if namedGroups.get("director") is not None else "")
     all_shows = getAllShows()
     
     movies = [mov for mov in all_shows if director in mov["directors"]]
@@ -125,8 +125,8 @@ def MoviesByDirector(namedGroups):
     return res + '\n'.join(movieTitles)
     
 
-def TodayFilmsByLocation(namedGroups):
-    location = namedGroups.get("location").lower()
+def TodayFilmsByLocation(namedGroups={}):
+    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").lower()
     shows = getShowsZone(location)
 
     movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
@@ -135,22 +135,26 @@ def TodayFilmsByLocation(namedGroups):
     return res + '\n'.join(movieTitles)
 
 
-def ShowtimesByLocationinNbDays(namedGroups):
-    location = namedGroups.get("location").lower()
-    date = namedGroups.get("date")
-    details = namedGroups.get("detail")
-    formatDate = getTimeDateWeek(int(date), details)
+def ShowtimesByLocationinNbDays(namedGroups={}):
+    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").lower()
+    date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
+    detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "")
+    if date == "":
+        formatDate = getTimeDateWeek(0, detail)
+    else:
+        formatDate = getTimeDateWeek(int(date), detail)
 
     shows = getShowsZone(location)
     movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
 
-    if details == "days":
+    showsInfoDict = {}
+    if detail == "days":
         showsInfoDict = {
             movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
             for movieName in movieTitles
         }
     
-    res = f'Movies available in {date} {details} ( {formatDate} ) in {location}:\n' 
+    res = f'Movie shows available in {date} {detail} ( {formatDate} ) in {location}:\n' 
     for mov in showsInfoDict.keys():
         res += mov + '\n :'
         for theater in showsInfoDict[mov].keys():
