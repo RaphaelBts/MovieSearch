@@ -16,6 +16,7 @@ from matcher.responses import (
     TodayFilmsByLocation,
     FilmsByLocationinNbDays)
 
+##genres = ListGenres()
 
 def getIntent(message):
     for obj in patternList:
@@ -40,7 +41,7 @@ def getResponse(intent, namedGroups):
         'Movie by type': MovieByType(namedGroups) if 'type' in namedGroups.keys() else None,
         'Coming soon': MoviesComingSoon(),
         'Event': Events(),
-        'List of genres': ListGenres(),
+        'List of genres': 'merde',
         'Movie by actor': MoviesByActor(namedGroups) if 'actor' in namedGroups.keys() else None,
         'Movie by director': MoviesByDirector(namedGroups) if 'director' in namedGroups.keys() else None,
         'Available films today by location': TodayFilmsByLocation(namedGroups) if 'location' in namedGroups.keys() else None,

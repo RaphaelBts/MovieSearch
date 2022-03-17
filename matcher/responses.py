@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+from collections import OrderedDict
+
 import re
 import requests
 
@@ -75,13 +77,18 @@ def NewMovies(new=7):
     return res + '\n'.join(movieTitles)
 #endregion
 
-def MoviesComingSoon():
+def MoviesComingSoon():  # 24  6 mois c'est assez 
     all_shows = getAllShows()
     movies = [mov for mov in all_shows if mov["isComingSoon"]]
-    movieTitles = [mov["title"] for mov in movies]
-    
+    moviesOrder = dict() 
+    for mov in movies : 
+        moviesOrder[mov["title"]]=mov["releaseAt"][0]
+        moviesOrdered = OrderedDict(sorted(moviesOrder.items(), key = lambda x:datetime.strptime(x[1], '%d-%m-%Y'), reverse=True))
+    movieTitles = []
+    for titles,releaseDate in moviesOrdered.items():
+        movieTitles.append(titles)
     res = 'Movies coming soon :\n' 
-    return res + '\n'.join(movieTitles)
+    return res + ', '.join(movieTitles[:24])
 
 
 def Events():
@@ -165,13 +172,19 @@ def getTimeDateWeek(number, details):
 
         
 
+  
+# def ListGenres():
+#     # shows = getAllShows()
+#     # genres = set() 
+#     # for show in shows : 
+#     #     genres.add(show["genres"].value)
+#     merde = "tu te fous de ma geule"
+#     return merde
 
-def ListGenres():
-    shows = getAllShows()
 
-    genres = [
-        str(show["genres"]) 
-        for show in shows 
-        if "Non défini" not in str(show["genres"])
-    ]
-    return '\n'.join(list(set(genres)))
+    # genres = [
+    #     str(show["genres"]) 
+    #     for show in shows 
+    #     if "Non défini" not in str(show["genres"])
+    # ]
+    # return '\n'.join(list(set(genres)))
