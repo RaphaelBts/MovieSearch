@@ -16,7 +16,7 @@ def Default():
 
 
 def Hello(namedGroups={}):
-    greeting = (namedGroups.get("greeting") if namedGroups.get("greeting") is not None else "")
+    greeting = (namedGroups.get("greeting") if namedGroups.get("greeting") is not None else " ")
     return f'{greeting} you !'
 
 
@@ -84,11 +84,11 @@ def MoviesComingSoon():  # 24  6 mois c'est assez
     for mov in movies : 
         moviesOrder[mov["title"]]=mov["releaseAt"][0]
         moviesOrdered = OrderedDict(sorted(moviesOrder.items(), key = lambda x:datetime.strptime(x[1], "%Y-%m-%d"), reverse=True))
-    movieTitles = []
-    for titles,releaseDate in moviesOrdered.items():
-        movieTitles.append(titles)
+  
     res = 'Movies coming soon :\n' 
-    return res + ', '.join(movieTitles[:24])
+    for titles,releaseDate in moviesOrdered.items():
+            res += ' '+ titles+' '+releaseDate+'\n'
+    return res
 
 
 def Events():
@@ -176,13 +176,13 @@ def getTimeDateWeek(number, details):
         
 
   
-# def ListGenres():
-#     # shows = getAllShows()
-#     # genres = set() 
-#     # for show in shows : 
-#     #     genres.add(show["genres"].value)
-#     merde = "tu te fous de ma geule"
-#     return merde
+def ListGenres():
+
+    shows = getAllShows()
+    genres = set() 
+    for show in shows : 
+          genres.add(show["genres"][0])
+    return genres 
 
 
     # genres = [

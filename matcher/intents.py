@@ -10,13 +10,12 @@ from matcher.responses import (
     MovieByType, 
     MoviesComingSoon, 
     Events, 
-    # ListGenres,
+    ListGenres,
     MoviesByActor,
     MoviesByDirector,
     TodayFilmsByLocation,
     ShowtimesByLocationinNbDays)
 
-##genres = ListGenres()
 
 def getIntent(message):
     for obj in patternList:
@@ -39,16 +38,18 @@ def getResponse(intent, namedGroups):
         'Help': Help(),
         'Movie info': MovieInfos(namedGroups) if 'moviename' in namedGroups.keys() else None,
         'Movie by type': MovieByType(namedGroups) if 'type' in namedGroups.keys() else None,
-        # 'Coming soon': MoviesComingSoon(),
+        'Coming soon': MoviesComingSoon(),
         'Event': Events(),
-        'List of genres': 'merde',
+        'List of genres': ListGenres(),
         'Movie by actor': MoviesByActor(namedGroups) if 'actor' in namedGroups.keys() else None,
         'Movie by director': MoviesByDirector(namedGroups) if 'director' in namedGroups.keys() else None,
         'Available films today by location': TodayFilmsByLocation(namedGroups) if 'location' in namedGroups.keys() else None,
         'Films dispo dans x jour/heure à la localisation y' : ShowtimesByLocationinNbDays(namedGroups)
     }
+    for key,value in responseDict.items():
+        if key == intent :
+            return responseDict[intent]
 
-    return responseDict.get(intent)
 
 def botResponse(message):
 
@@ -57,6 +58,8 @@ def botResponse(message):
     print(intent, namedGroup)
 
     # get the response
-    response = getResponse(intent, namedGroup)
-
+    print("reponse")
+    response = getResponse(intent, namedGroup) ## l'erreur est ici 
+    print(response)
+    print(intent, namedGroup)
     return response
