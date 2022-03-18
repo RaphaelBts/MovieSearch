@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from collections import OrderedDict
+from email.utils import localtime
 
 import itertools
 
@@ -188,7 +189,7 @@ def MovieScreeningsTodayTomorrowCinema(namedGroups={}):
     else:
         return ""
     theater = 'cinema-' + theaterName.replace('é', 'e').replace(' ', '-')
-    print(slug, theater, formatDate)
+
     showTimes = [
         [str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]]
         for res in getMovieShowtimes(slug, theater, date=formatDate)
@@ -296,6 +297,37 @@ def ScreeningsTodayTomorrowLocation(namedGroups={}):
         
     return res
 
+
+def MovieScreeningsTodayTomorrowLocation(namedGroups={}):
+    movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
+    time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
+    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
+    # avoid problems
+    if movieName == "" or time == "" or location == "":
+        return None
+
+    infos = getMovieInfos(apiSearch(movieName))
+    if type(infos) == dict and "slug" in infos.keys():
+        slug = infos["slug"]
+    else:
+        slug = ""
+    if time == "today":
+        formatDate = getTimeDate(0, "days")
+    elif time == "tomorrow":
+        formatDate = getTimeDate(1, "days")
+    else:
+        return ""
+    city = location.replace('é', 'e').replace(' ', '-')
+    movieTheaters = CINEMA_DICT.get(city)
+
+    showTimes = {
+        theater : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]] for res in getMovieShowtimes(slug, theater, date=formatDate)]
+        for theater in movieTheaters
+    }
+    
+    res = f'Screenings available for {movieName} {time} ( {formatDate} ) in {location}:\n'
+    res += '\n\n'.join(['\n'.join(['\t'.join(screen) for screen in showTimes[theater]]) for theater in showTimes.keys()])
+    return res
 
 
 def getTimeDate(nbDays, details):

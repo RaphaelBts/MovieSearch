@@ -18,7 +18,8 @@ from matcher.responses import (
     TodayFilmsByLocation,
     MovieScreeningsTodayTomorrowCinema,
     MovieScreeningsDaysCinema,
-    ScreeningsDaysLocation)
+    ScreeningsDaysLocation,
+    MovieScreeningsTodayTomorrowLocation)
 
 
 def getIntent(message):
@@ -51,7 +52,8 @@ def getResponse(intent, namedGroups):
         'Movie screening for movie ... today/tomorrow in cinema ...': MovieScreeningsTodayTomorrowCinema(namedGroups),
         'Movie screening for movie ... in ... days in cinema ...': MovieScreeningsDaysCinema(namedGroups),
         'All movies screening in ... days in ...' : ScreeningsDaysLocation(namedGroups),
-        'All movies screening today/tomorrow in ...' : ScreeningsTodayTomorrowLocation(namedGroups)
+        'All movies screening today/tomorrow in ...' : ScreeningsTodayTomorrowLocation(namedGroups),
+        'Movie screening for movie ... today/tomorrow in ...': MovieScreeningsTodayTomorrowLocation(namedGroups)
     }
 
     if intent not in responseDict.keys():

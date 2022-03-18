@@ -81,7 +81,7 @@ patternList = [
 
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*((of|for)(\sthe)?(\s(film|movie)?))\\s*(?P<moviename>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
-        'intent': 'Seances film x ajd/demain localisation (ville) y' # date : today or tomorrow 
+        'intent': 'Movie screening for movie ... today/tomorrow in ...' # date : today or tomorrow 
     },
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*((of|for)(\sthe)?(\s(film|movie)?))\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
@@ -90,10 +90,12 @@ patternList = [
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
         'intent': 'All movies screening today/tomorrow in ...' # date : today or tomorrow 
+        # done
     },
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
         'intent': 'All movies screening in ... days in ...' # authorized date : in x days (maximum 14 days)
+        # done
     },
     ##############################################################################################################
     {
