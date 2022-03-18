@@ -324,9 +324,9 @@ def MovieScreeningsTodayTomorrowLocation(namedGroups={}):
         theater : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]] for res in getMovieShowtimes(slug, theater, date=formatDate)]
         for theater in movieTheaters
     }
-    
+
     res = f'Screenings available for {movieName} {time} ( {formatDate} ) in {location}:\n'
-    res += '\n\n'.join(['\n'.join(['\t'.join(screen) for screen in showTimes[theater]]) for theater in showTimes.keys()])
+    res += '\n\n'.join([theater + '\n' + '\n'.join(['\t'.join(screen) for screen in showTimes[theater]]) for theater in showTimes.keys()])
     return res
 
 
