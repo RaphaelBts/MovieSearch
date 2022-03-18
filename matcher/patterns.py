@@ -3,28 +3,28 @@ patternList = [
     {
         'pattern' : '\\b(?P<greeting>[H-h]i|[H-h]ello|[H-h]ey|[G-g]ood morning|[G-g]ood afternoon)\\b',
         'intent' : 'Hello'
-        # done
+        # done + tested
     }, 
     {
         'pattern' :'\\b(bye|exit|finish|end|stop)\\b',
         'intent' : 'Exit'
-        # done
+        # done + tested : trigger la deco du bot (quand migré sur serveur)
     },
     {
         'pattern' : '\\b([H-h]elp(s)?|Aide(s)?|Command(s)?)\\b',
         'intent' : 'Help'
-        # done
+        # done + tested
     },
     ### Zone   ##########################################################################################################
     {
         'pattern': '(.*[I-i]nfo(s)?|[I-i]nformation(s)?)\\s(about|on)\\s(the\\s(film(s)?|movie(s)?)\\s)?(?P<moviename>\\w+(\\s\\w+)*)',
         'intent': 'Movie info'
-        # done
+        # done + tested 
     },
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s(with)\\s(the\\sactor)?(Mr|Mrs)?(\\.)?(?P<actor>.*)',
         'intent': 'Movie by actor'
-        # done
+        # done 
         # movies with actor Tom Holland not working (the !!!)
     },
     {
@@ -45,7 +45,7 @@ patternList = [
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\s*screen)\\s*(at\\s*|in\\s*)?(?P<location>\\w+(\\s\\w+)*)',
         'intent': 'Available films today by location' # location = city
-        # done
+        # done 
     },
     ### Zone movie theater ##########################################################################################################
     {
@@ -55,7 +55,7 @@ patternList = [
     },
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
-        'intent': 'Toutes les seances dans y jours cinema x' # authorized date : in x days (maximum 14 days)
+        'intent': 'All movie screening in ... days in cinema ...' # authorized date : in x days (maximum 14 days)
     },
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*((of|for)(\sthe)?(\s(film|movie)?))\\s*(?P<moviename>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
