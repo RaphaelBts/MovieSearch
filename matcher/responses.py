@@ -168,7 +168,7 @@ def TodayFilmsByLocation(namedGroups={}):
     return res + '\n'.join(movieTitles)
 
 
-def MovieShowTimesTodayTomorrowCinema(namedGroups={}):
+def MovieScreeningsTodayTomorrowCinema(namedGroups={}):
     movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
     time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
     theaterName = (namedGroups.get("movie_theater_name") if namedGroups.get("movie_theater_name") is not None else "").rstrip().lower()
@@ -195,12 +195,12 @@ def MovieShowTimesTodayTomorrowCinema(namedGroups={}):
         if res["status"] == "available"
     ]
 
-    res = f'Movie shows available for {movieName} {time} ( {formatDate} ) in {theaterName}:\n'
+    res = f'Screenings available for {movieName} {time} ( {formatDate} ) in {theaterName}:\n'
     res += '\n'.join(['\t'.join(x) for x in showTimes])
     return res
 
 
-def MovieShowtimesDaysCinema(namedGroups={}):
+def MovieScreeningsDaysCinema(namedGroups={}):
     movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
     date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
     detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
@@ -225,12 +225,12 @@ def MovieShowtimesDaysCinema(namedGroups={}):
         if x.get("status") == "available"
     ]
 
-    res = f'Movie shows available for {movieName} in {date} {detail} ( {formatDate} ) in {theaterName}:\n'
+    res = f'Screenings available for {movieName} in {date} {detail} ( {formatDate} ) in {theaterName}:\n'
     res += '\n'.join(['\t'.join(x) for x in showTimes])
     return res
 
 
-def ShowtimesByLocationinNbDays(namedGroups={}):
+def ScreeningsDaysLocation(namedGroups={}):
     location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
     date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
     detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
@@ -262,6 +262,40 @@ def ShowtimesByLocationinNbDays(namedGroups={}):
             res += '\n'
         
     return res
+
+
+def ScreeningsTodayTomorrowLocation(namedGroups={}):
+    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
+    time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
+    # avoid problems
+    if location == "" or time == "":
+        return None
+
+    if time == "today":
+        formatDate = getTimeDate(0, "days")
+    elif time == "tomorrow":
+        formatDate = getTimeDate(1, "days")
+    else:
+        return ""
+
+    shows = getShowsZone(location)
+    movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
+
+    showsInfoDict = {
+        movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
+        for movieName in movieTitles
+    }
+    
+    res = f'Screenings available {time} ( {formatDate} ) in {location}:\n' 
+    for mov in showsInfoDict.keys():
+        res += mov + '\n :'
+        for theater in showsInfoDict[mov].keys():
+            res += '\t--> ' + theater + ' --> '
+            res += ', '.join(list(map(lambda x: str(datetime.strptime(x["time"], "%Y-%m-%d %H:%M:%S").time()), showsInfoDict[mov][theater])))
+            res += '\n'
+        
+    return res
+
 
 
 def getTimeDate(nbDays, details):

@@ -13,10 +13,12 @@ from matcher.responses import (
     ListGenres,
     MoviesByActor,
     MoviesByDirector,
+    ScreeningsDaysLocation,
+    ScreeningsTodayTomorrowLocation,
     TodayFilmsByLocation,
-    MovieShowTimesTodayTomorrowCinema,
-    MovieShowtimesDaysCinema,
-    ShowtimesByLocationinNbDays)
+    MovieScreeningsTodayTomorrowCinema,
+    MovieScreeningsDaysCinema,
+    ScreeningsDaysLocation)
 
 
 def getIntent(message):
@@ -46,10 +48,10 @@ def getResponse(intent, namedGroups):
         'Movie by actor': MoviesByActor(namedGroups),
         'Movie by director': MoviesByDirector(namedGroups),
         'Available films today by location': TodayFilmsByLocation(namedGroups),
-        'Movie screening for movie ... today/tomorrow in cinema ...': MovieShowTimesTodayTomorrowCinema(namedGroups),
-        'Movie screening for movie ... in ... days in cinema ...': MovieShowtimesDaysCinema(namedGroups),
-        #'Films dispo dans x jour/heure à la localisation y' : ShowtimesByLocationinNbDays(namedGroups),
-       # 'Seances film x cinema y' :
+        'Movie screening for movie ... today/tomorrow in cinema ...': MovieScreeningsTodayTomorrowCinema(namedGroups),
+        'Movie screening for movie ... in ... days in cinema ...': MovieScreeningsDaysCinema(namedGroups),
+        'All movies screening in ... days in ...' : ScreeningsDaysLocation(namedGroups),
+        'All movies screening today/tomorrow in ...' : ScreeningsTodayTomorrowLocation(namedGroups)
     }
 
     if intent not in responseDict.keys():
