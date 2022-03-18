@@ -36,7 +36,6 @@ def Help():                                                                     
     return 'Glad you ask ! You will find bellow all the commands available to you \n'
 
 
-
 def MovieInfos(namedGroups={}):
 
     movie = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "")
@@ -85,6 +84,7 @@ def NewMovies(new=7):
     res = 'New movies (released less than ' + str(new) + ' days ago):\n\n' 
     return res + '\n'.join(movieTitles)
 #endregion
+
 
 def MoviesComingSoon():  # 24  6 mois c'est assez 
     all_shows = getAllShows()
@@ -150,14 +150,71 @@ def TodayFilmsByLocation(namedGroups={}):
     return res + '\n'.join(movieTitles)
 
 
+def MovieShowTimesTodayTomorrowCinema(namedGroups={}):
+    movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
+    time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").lower()
+    theaterName = (namedGroups.get("movie_theater_name") if namedGroups.get("movie_theater_name") is not None else "").rstrip().lower()
+
+    infos = getMovieInfos(apiSearch(movieName))
+    if "slug" and type(infos) == dict() in infos.keys():
+        slug = infos["slug"]
+    else:
+        slug = ""
+    if time == "today":
+        formatDate = getTimeDate(0, "days")
+    elif time == "tomorrow":
+        formatDate = getTimeDate(1, "days")
+    else:
+        return ""
+    theater = 'cinema-' + theaterName.replace('é', 'e').replace(' ', '-')
+    
+    showTimes = [
+        [str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]]
+        for res in getMovieShowtimes(slug, theater, date=formatDate)
+        if res["status"] == "available"
+    ]
+
+    res = f'Movie shows available for {movieName} {time} ( {formatDate} ) in {theaterName}:\n'
+    res += '\n'.join(['\t'.join(x) for x in showTimes])
+    return res
+
+
+def MovieShowtimesDaysCinema(namedGroups={}):
+    movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
+    date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
+    detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
+    theaterName = (namedGroups.get("movie_theater_name") if namedGroups.get("movie_theater_name") is not None else "").rstrip().lower()
+
+    infos = getMovieInfos(apiSearch(movieName))
+    if "slug" and type(infos) == dict() in infos.keys():
+        slug = infos["slug"]
+    if date == "":
+        formatDate = getTimeDate(0, detail)
+    else:
+        formatDate = getTimeDate(int(date), detail)
+    theater = 'cinema-' + theaterName.replace('é', 'e').replace(' ', '-')
+    
+    showTimes = [
+        [str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]]
+        for res in getMovieShowtimes(slug, theater, date=formatDate)
+        if res["status"] == "available"
+    ]
+
+    res = f'Movie shows available for {movieName} in {date} {detail} ( {formatDate} ) in {theaterName}:\n'
+    res += '\n'.join(['\t'.join(x) for x in showTimes])
+    return res
+
+
+
 def ShowtimesByLocationinNbDays(namedGroups={}):
     location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").lower()
     date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
     detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "")
+    
     if date == "":
-        formatDate = getTimeDateWeek(0, detail)
+        formatDate = getTimeDate(0, detail)
     else:
-        formatDate = getTimeDateWeek(int(date), detail)
+        formatDate = getTimeDate(int(date), detail)
 
     shows = getShowsZone(location)
     movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
@@ -180,11 +237,11 @@ def ShowtimesByLocationinNbDays(namedGroups={}):
     return res
 
 
-def getTimeDateWeek(number, details):
+def getTimeDate(nbDays, details):
     res = ""
 
     if details == "days":
-        res = (datetime.today().date() + timedelta(days=number)).strftime("%Y-%m-%d")
+        res = (datetime.today().date() + timedelta(days=nbDays)).strftime("%Y-%m-%d")
     
     return res
 

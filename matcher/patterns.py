@@ -10,12 +10,11 @@ patternList = [
         # done
     },
     {
-        'pattern' : '\\b(Help(s)|Aide(s)|Command(s))\\b',
+        'pattern' : '\\b([H-h]elp(s)?|Aide(s)?|Command(s)?)\\b',
         'intent' : 'Help'
         # done
     },
-
-
+    ##############################################################################################################
     {
         'pattern': '(.*\\s[I-i]nfo(s)?|[I-i]nformation(s)?)\\s(about|on)\\s(the\\s(film(s)?|movie(s)?)\\s)?(?P<moviename>\\w+(\\s\\w+)*)',
         'intent': 'Movie info'
@@ -31,67 +30,66 @@ patternList = [
         'intent': 'Movie by director'
         # done
     },
+    ##############################################################################################################
     {
-        'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\sscreen)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?|hour(s)?|week(s)?)\\s*(in\\s*)?(?P<location>\\w+(\\s\\w+)*)',
-        'intent': 'Films dispo dans x jour/heure à la localisation y' # authorized date : in x days (maximum 14 days), in x hours (maximum 24 hours), in x weeks (maximum 2 weeks)
+        'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\sscreen)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(in\\s*)?(?P<location>\\w+(\\s\\w+)*)',
+        'intent': 'Tous les films dispo dans x jour à la localisation y' # authorized date : in x days (maximum 14 days)
     },
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\s*screen)\\s*(at\\s*|in\\s*)?(?P<location>\\w+(\\s\\w+)*)\\s(?P<time>now|today|currently)',
-        'intent': 'Available films today by location'
+        'intent': 'Available films today by location' # location = city
         # done
     },
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\s*screen)\\s*(at\\s*|in\\s*)?(?P<location>\\w+(\\s\\w+)*)',
-        'intent': 'Available films today by location'
+        'intent': 'Available films today by location' # location = city
         # done
     },
-
+    ##############################################################################################################
     {
-        'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*(?P<moviename>.*)\\s*(?P<day>today|tomorrow)\\s*at\\s*(?P<time>\\d*)(pm|am)?\\s*(at\\s*|in\\s*)?(?P<location>.*)',
-        'intent': 'Film x ajd/demain à heure y au cinéma z' # date : today or only 
+        'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*(?P<moviename>.*)\\s*(?P<day>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
+        'intent': 'Nom Film x ajd/demain à la localisation z' # date : today or tommorow only 
     },
     {
-        'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*(?P<moviename>.*)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?|hour(s)?|week(s)?)\\s*at\\s*(?P<time>\\d*)(pm|am)?\\s*(at\\s*|in\\s*)?(?P<location>.*)',
-        'intent': 'Film x dans y jours à heure z au cinéma zz' # date :  in x days (maximum 14 days), in x hours (maximum 24 hours), in x weeks (maximum 2 weeks)
+        'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*(?P<moviename>.*)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
+        'intent': 'Nom Film x dans y jours à la localisation z' # date :  in x days (maximum 14 days)
     },
-
+    ##############################################################################################################
     {
-        'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*(?P<moviename>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>Pathé.*|Gaumont.*)',
-        'intent': 'Seances film x cinema y' # date : today or tomorrow only
-    },
-    {
-        'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*(?P<moviename>.*)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?|hour(s)?|week(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>Pathé.*|Gaumont.*)',
-        'intent': 'Seances film x cinema y' # authorized date : in x days (maximum 14 days), in x hours (maximum 24 hours), in x weeks (maximum 2 weeks)
-    },
-
-    {
-        'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*(?P<moviename>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
-        'intent': 'Seances film x localisation (ville) y' # date : today or tomorrow 
+        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))?\\s*(?P<moviename>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
+        'intent': 'Movie screening for movie ... today/tomorrow in cinema ...' # date : today or tomorrow only
+        # done
     },
     {
-        'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*(?P<moviename>.*)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?|hour(s)?|week(s)?)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
-        'intent': 'Seances film x localisation (ville) y' # authorized date : in x days (maximum 14 days), in x hours (maximum 24 hours), in x weeks (maximum 2 weeks)
-    },
-    
-    {
-        'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
-        'intent': 'Toutes les seances localisation x' # date : today or tomorrow 
+        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))?\\s*(?P<moviename>.*)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
+        'intent': 'Movie screening for movie ... in ... days in cinema ...' # authorized date : in x days (maximum 14 days)
+        # done
     },
     {
-        'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?|hour(s)?|week(s)?)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
-        'intent': 'Toutes les seances localisation y' # authorized date : in x days (maximum 14 days), in x hours (maximum 24 hours), in x weeks (maximum 2 weeks)
+        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))?\\s*(?P<moviename>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
+        'intent': 'Seances film x ajd/demain localisation (ville) y' # date : today or tomorrow 
     },
-    
+    {
+        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))?\\s*(?P<moviename>.*)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
+        'intent': 'Seances film x dans y jours localisation (ville) y' # authorized date : in x days (maximum 14 days)
+    },
+    {
+        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))?\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
+        'intent': 'Toutes les seances ajd/demain localisation x' # date : today or tomorrow 
+    },
+    {
+        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))?\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
+        'intent': 'Toutes les seances dans y jours localisation y' # authorized date : in x days (maximum 14 days)
+    },
     {
         'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>Pathé.*|Gaumont.*)',
-        'intent': 'Toutes les seances cinema x' # date : today or tomorrow 
+        'intent': 'Toutes les seances ajd/demain cinema x' # date : today or tomorrow 
     },
     {
-        'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?|hour(s)?|week(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>Pathé.*|Gaumont.*)',
-        'intent': 'Toutes les seances cinema x' # authorized date : in x days (maximum 14 days), in x hours (maximum 24 hours), in x weeks (maximum 2 weeks)
+        'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))?\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
+        'intent': 'Toutes les seances dans y jours cinema x' # authorized date : in x days (maximum 14 days)
     },
-
-
+    ##############################################################################################################
     {
         'pattern':'.*\\s*(event)\\s*.*',
         'intent': 'Event'

@@ -14,6 +14,8 @@ from matcher.responses import (
     MoviesByActor,
     MoviesByDirector,
     TodayFilmsByLocation,
+    MovieShowTimesTodayTomorrowCinema,
+    MovieShowtimesDaysCinema,
     ShowtimesByLocationinNbDays)
 
 
@@ -44,6 +46,8 @@ def getResponse(intent, namedGroups):
         'Movie by actor': MoviesByActor(namedGroups) if 'actor' in namedGroups.keys() else None,
         'Movie by director': MoviesByDirector(namedGroups) if 'director' in namedGroups.keys() else None,
         'Available films today by location': TodayFilmsByLocation(namedGroups) if 'location' in namedGroups.keys() else None,
+        'Movie screening for movie ... today/tomorrow in cinema ...': MovieShowTimesTodayTomorrowCinema(namedGroups),
+        'Movie screening for movie ... in ... days in cinema ...': MovieShowtimesDaysCinema(namedGroups),
         'Films dispo dans x jour/heure à la localisation y' : ShowtimesByLocationinNbDays(namedGroups),
        # 'Seances film x cinema y' :
     }
@@ -59,7 +63,6 @@ def botResponse(message):
     print(intent, namedGroup)
 
     # get the response
-    print("reponse")
     response = getResponse(intent, namedGroup) ## l'erreur est ici 
     print(response)
     print(intent, namedGroup)

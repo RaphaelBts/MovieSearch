@@ -17,7 +17,7 @@ def getMovieInfos(movieName, api="https://www.cinemaspathegaumont.com/api"):
     return res
 
 
-def getMovieShowtimes(movieName, theaterName, api="https://www.cinemaspathegaumont.com/api", date=""):
+def getMovieShowtimes(movieName, theaterName, date="", api="https://www.cinemaspathegaumont.com/api"):
     url = f'{api}/show/{movieName}/showtimes/{theaterName}'
     if date != "":
         url += f'/{date}'
