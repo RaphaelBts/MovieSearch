@@ -26,6 +26,8 @@ Packages to install : discord.py
 ```
 pip install discord.py
 ```
+pip install simple_colours
+pip install termcolor
 
 ## Use movieSearch bot
 

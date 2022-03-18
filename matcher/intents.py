@@ -44,7 +44,8 @@ def getResponse(intent, namedGroups):
         'Movie by actor': MoviesByActor(namedGroups) if 'actor' in namedGroups.keys() else None,
         'Movie by director': MoviesByDirector(namedGroups) if 'director' in namedGroups.keys() else None,
         'Available films today by location': TodayFilmsByLocation(namedGroups) if 'location' in namedGroups.keys() else None,
-        'Films dispo dans x jour/heure à la localisation y' : ShowtimesByLocationinNbDays(namedGroups)
+        'Films dispo dans x jour/heure à la localisation y' : ShowtimesByLocationinNbDays(namedGroups),
+       # 'Seances film x cinema y' :
     }
     for key,value in responseDict.items():
         if key == intent :

@@ -1,6 +1,11 @@
 from datetime import datetime, timedelta
 from collections import OrderedDict
 
+import itertools
+
+import attr
+
+
 import re
 import requests
 
@@ -10,6 +15,9 @@ import jsonpath
 
 from api.requests import apiSearch, getMovieInfos, getAllShows, getShowsZone, getAllMovieTheaters, getMovieShowtimes
 from api.requests import CITY_LIST, CINEMA_DICT
+
+
+
 
 def Default():
     return 'I did not get your intent. Please try again.'
@@ -24,8 +32,9 @@ def Exit():
     return 'Hope I helped. Do not hesitate to come seeing me again !'
 
 
-def Help():
-    return 'How can I help you ?'
+def Help():                                                                          # Vrai travail de synthese des commandes du bot + mise en page : RAPH 
+    return 'Glad you ask ! You will find bellow all the commands available to you \n'
+
 
 
 def MovieInfos(namedGroups={}):
@@ -43,7 +52,7 @@ def MovieInfos(namedGroups={}):
 
 
 #region MovieByType (genre or new movies)
-def MovieByType(namedGroups={}):
+def MovieByType(namedGroups={}): # vrmt compris l'utilité de cette fonction 
 
     movieType = (namedGroups.get("type") if namedGroups.get("type") is not None else "")
     genresList = ['Fantaisie',] # get the genre list -> a completer
@@ -73,21 +82,27 @@ def NewMovies(new=7):
     movies = [mov for mov in all_shows if mov["isNew"]]
     movieTitles = [mov["title"] for mov in movies]
     
-    res = 'New movies (released less than ' + str(new) + ' days ago):\n' 
+    res = 'New movies (released less than ' + str(new) + ' days ago):\n\n' 
     return res + '\n'.join(movieTitles)
 #endregion
 
 def MoviesComingSoon():  # 24  6 mois c'est assez 
     all_shows = getAllShows()
-    movies = [mov for mov in all_shows if mov["isComingSoon"]]
+    movies = [mov for mov in all_shows if mov["isComingSoon"] and mov['isMovie']]
     moviesOrder = dict() 
     for mov in movies : 
         moviesOrder[mov["title"]]=mov["releaseAt"][0]
-        moviesOrdered = OrderedDict(sorted(moviesOrder.items(), key = lambda x:datetime.strptime(x[1], "%Y-%m-%d"), reverse=True))
-  
-    res = 'Movies coming soon :\n' 
-    for titles,releaseDate in moviesOrdered.items():
-            res += ' '+ titles+' '+releaseDate+'\n'
+        moviesOrdered = OrderedDict(sorted(moviesOrder.items(), key = lambda x:datetime.strptime(x[1], "%Y-%m-%d"), reverse=False))
+    x = itertools.islice(moviesOrdered.items(), 0, 50)
+    res = '**Movies coming soon** : \n'
+    keys=[0]
+    for titles,releaseDate in x:
+        date_datetime = datetime.strptime(releaseDate, "%Y-%m-%d")
+        reformated_date = date_datetime.strftime("%d-%m-%Y")
+        keys.append(date_datetime.month)
+        if date_datetime.month > keys[-2] :
+            res+='\n'
+        res += ''+'*'+reformated_date+'*'+'    '+'**'+titles+'**'+ '\n'
     return res
 
 
@@ -182,7 +197,17 @@ def ListGenres():
     genres = set() 
     for show in shows : 
           genres.add(show["genres"][0])
-    return genres 
+    genres_sorted = sorted([genre for genre in genres if genre!='Non défini'])
+    str="** The Gaumont *genre* colllection** : \n\n"
+    for i in range(int(len(genres_sorted)/5+1)):
+        str+='  |  '.join(genres_sorted[i*5:(i+1)*5])+ "\n"  
+    return str
+
+
+    # str="**"
+    # for i in range(int(len(genres_sorted)/5+1)):
+    #     str+='**  |  **'.join(genres_sorted[i*5:(i+1)*5])+ "** \n **"  
+    # return str-'**'
 
 
     # genres = [

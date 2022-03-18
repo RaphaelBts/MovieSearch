@@ -10,7 +10,7 @@ patternList = [
         # done
     },
     {
-        'pattern' : '\\b(Help|Helps|Aide|Aides)\\b',
+        'pattern' : '\\b(Help(s)|Aide(s)|Command(s))\\b',
         'intent' : 'Help'
         # done
     },
@@ -100,17 +100,20 @@ patternList = [
     {
         'pattern':'.*\\s*(coming\\s*soon)\\s*.*',
         'intent': 'Coming soon'
-        # done
+        # done  mise en forme quasi done
     },
     {
         'pattern':'.*\\s*(list(s)?\\s*of\\s*genre(s)?)\\s*.*',
         'intent': 'List of genres'
-    },
+    },   #done mise en forme quasi done 
     {
         'pattern':'(?P<type>.*)([F-f]ilm(s)?|[M-m]ovie(s)?)',
         'intent': 'Movie by type'
-        # done
+        # done pas capté la plus value
     }
+        
 
     #PRENDRE EN COMPTE LES ESPACES OUBLIES ET ACCIDENTELS
+    # RAJOUTER : LIST ALL CINEMAS ZONE X je sais que c'est faisable masi faut trifouiller 
+    # rajouter pattern : !helps / commands = > la réponse renvoie la liste des fonctions (list of genres, events, coming soon etc on fait un truc propre qui explique les différentes fonctions et la typographie)
     ]
