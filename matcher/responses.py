@@ -156,7 +156,7 @@ def MovieShowTimesTodayTomorrowCinema(namedGroups={}):
     theaterName = (namedGroups.get("movie_theater_name") if namedGroups.get("movie_theater_name") is not None else "").rstrip().lower()
 
     infos = getMovieInfos(apiSearch(movieName))
-    if "slug" and type(infos) == dict() in infos.keys():
+    if type(infos) == dict and "slug" in infos.keys():
         slug = infos["slug"]
     else:
         slug = ""
@@ -167,7 +167,7 @@ def MovieShowTimesTodayTomorrowCinema(namedGroups={}):
     else:
         return ""
     theater = 'cinema-' + theaterName.replace('é', 'e').replace(' ', '-')
-    
+    print(slug, theater, formatDate)
     showTimes = [
         [str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]]
         for res in getMovieShowtimes(slug, theater, date=formatDate)
@@ -185,19 +185,23 @@ def MovieShowtimesDaysCinema(namedGroups={}):
     detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
     theaterName = (namedGroups.get("movie_theater_name") if namedGroups.get("movie_theater_name") is not None else "").rstrip().lower()
 
+    # eviter les problemes
+    if movieName == "" or date == "" or detail == "" or theaterName == "":
+        return None
+
     infos = getMovieInfos(apiSearch(movieName))
-    if "slug" and type(infos) == dict() in infos.keys():
+    if type(infos) == dict and "slug" in infos.keys():
         slug = infos["slug"]
     if date == "":
         formatDate = getTimeDate(0, detail)
     else:
         formatDate = getTimeDate(int(date), detail)
     theater = 'cinema-' + theaterName.replace('é', 'e').replace(' ', '-')
-    
+
     showTimes = [
-        [str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]]
-        for res in getMovieShowtimes(slug, theater, date=formatDate)
-        if res["status"] == "available"
+        [str(datetime.strptime(x["time"], "%Y-%m-%d %H:%M:%S").time()), x["version"], x["refCmd"]]
+        for x in getMovieShowtimes(slug, theater, date=formatDate)
+        if x.get("status") == "available"
     ]
 
     res = f'Movie shows available for {movieName} in {date} {detail} ( {formatDate} ) in {theaterName}:\n'

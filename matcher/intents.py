@@ -48,7 +48,7 @@ def getResponse(intent, namedGroups):
         'Available films today by location': TodayFilmsByLocation(namedGroups) if 'location' in namedGroups.keys() else None,
         'Movie screening for movie ... today/tomorrow in cinema ...': MovieShowTimesTodayTomorrowCinema(namedGroups),
         'Movie screening for movie ... in ... days in cinema ...': MovieShowtimesDaysCinema(namedGroups),
-        'Films dispo dans x jour/heure à la localisation y' : ShowtimesByLocationinNbDays(namedGroups),
+        #'Films dispo dans x jour/heure à la localisation y' : ShowtimesByLocationinNbDays(namedGroups),
        # 'Seances film x cinema y' :
     }
     for key,value in responseDict.items():
