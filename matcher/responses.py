@@ -14,7 +14,7 @@ import json
 from jsonpath_ng.ext import parse
 import jsonpath
 
-from api.requests import apiSearch, getMovieInfos, getAllShows, getShowsZone, getAllMovieTheaters, getMovieShowtimes
+from api.requests import apiSearch, getMovieInfos, getAllShows, getShowsZone, getAllMovieTheaters, getMovieShowtimes, getMovieTheaterShows
 from api.requests import CITY_LIST, CINEMA_DICT
 
 
@@ -169,6 +169,35 @@ def TodayFilmsByLocation(namedGroups={}):
     return res + '\n'.join(movieTitles)
 
 
+def ScreeningsTodayTomorrowCinema(namedGroups={}):
+    time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
+    theaterName = (namedGroups.get("movie_theater_name") if namedGroups.get("movie_theater_name") is not None else "").rstrip().lower()
+    # avoid problems
+    if time == "" or theaterName == "":
+        return None
+
+    if time == "today":
+        formatDate = getTimeDate(0, "days")
+    elif time == "tomorrow":
+        formatDate = getTimeDate(1, "days")
+    else:
+        return ""
+    theater = 'cinema-' + theaterName.replace('é', 'e').replace(' ', '-')
+    shows = getMovieTheaterShows(theater)
+
+    showTimes = {
+        slug : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]]for res in getMovieShowtimes(slug, theater, date=formatDate)]
+        for slug, infos in shows.items()
+        if infos["bookable"]
+    }
+
+    filterShowTimes = { k:v for k,v in showTimes.items() if v != []}
+
+    res = f'Screenings available for {time} ( {formatDate} ) in {theaterName}:\n'
+    res += '\n\n'.join([movieName + '\n' + '\n'.join(['\t'.join(screen) for screen in showTimes[movieName]]) for movieName in filterShowTimes.keys()])
+    return res
+
+
 def MovieScreeningsTodayTomorrowCinema(namedGroups={}):
     movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
     time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
@@ -231,7 +260,7 @@ def MovieScreeningsDaysCinema(namedGroups={}):
     return res
 
 
-def ScreeningsDaysLocation(namedGroups={}):
+def AllScreeningsDaysLocation(namedGroups={}):
     location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
     date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
     detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
@@ -265,7 +294,7 @@ def ScreeningsDaysLocation(namedGroups={}):
     return res
 
 
-def ScreeningsTodayTomorrowLocation(namedGroups={}):
+def AllScreeningsTodayTomorrowLocation(namedGroups={}):
     location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
     time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
     # avoid problems

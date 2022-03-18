@@ -13,12 +13,12 @@ from matcher.responses import (
     ListGenres,
     MoviesByActor,
     MoviesByDirector,
-    ScreeningsDaysLocation,
-    ScreeningsTodayTomorrowLocation,
+    AllScreeningsDaysLocation,
+    AllScreeningsTodayTomorrowLocation,
     TodayFilmsByLocation,
+    ScreeningsTodayTomorrowCinema,
     MovieScreeningsTodayTomorrowCinema,
     MovieScreeningsDaysCinema,
-    ScreeningsDaysLocation,
     MovieScreeningsTodayTomorrowLocation,
     MovieScreeningsDaysLocation)
 
@@ -50,10 +50,11 @@ def getResponse(intent, namedGroups):
         'Movie by actor': MoviesByActor(namedGroups),
         'Movie by director': MoviesByDirector(namedGroups),
         'Available films today by location': TodayFilmsByLocation(namedGroups),
+        'All movie screening today/tomorrow in cinema ...': ScreeningsTodayTomorrowCinema(namedGroups),
         'Movie screening for movie ... today/tomorrow in cinema ...': MovieScreeningsTodayTomorrowCinema(namedGroups),
         'Movie screening for movie ... in ... days in cinema ...': MovieScreeningsDaysCinema(namedGroups),
-        'All movies screening in ... days in ...' : ScreeningsDaysLocation(namedGroups),
-        'All movies screening today/tomorrow in ...' : ScreeningsTodayTomorrowLocation(namedGroups),
+        'All movies screening in ... days in ...' : AllScreeningsDaysLocation(namedGroups),
+        'All movies screening today/tomorrow in ...' : AllScreeningsTodayTomorrowLocation(namedGroups),
         'Movie screening for movie ... today/tomorrow in ...': MovieScreeningsTodayTomorrowLocation(namedGroups),
         'Movie screening for movie ... in ... days in ...': MovieScreeningsDaysLocation(namedGroups)
     }

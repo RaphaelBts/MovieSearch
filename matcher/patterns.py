@@ -49,8 +49,9 @@ patternList = [
     },
     ### Zone movie theater ##########################################################################################################
     {
-        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>Pathé.*|Gaumont.*)',
-        'intent': 'Toutes les seances ajd/demain cinema x' # date : today or tomorrow 
+        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
+        'intent': 'All movie screening today/tomorrow in cinema ...' # date : today or tomorrow 
+        # done
     },
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
@@ -70,12 +71,12 @@ patternList = [
     {
         'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))\\s*((of|for)(\sthe)?(\s(film|movie)?))\\s*(?P<moviename>.*)\\s*(?P<day>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
         'intent': 'Nom Film x ajd/demain à la localisation z' # date : today or tommorow only 
-        # on veut les séances ??
+        # on veut quoi ? tous les films ? car on donne le nom d'un film
     },
     {
         'pattern':'(.*([F-f]ilm(s)?|[M-m]ovie(s)?))\\s*((of|for)(\sthe)?(\s(film|movie)?))\\s*(?P<moviename>.*)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<location>.*)',
         'intent': 'Nom Film x dans y jours à la localisation z' # date :  in x days (maximum 14 days)
-        # on veut les séances ??
+        # on veut quoi ? tous les films ? car on donne le nom d'un film
     },
     ##############################################################################################################
 

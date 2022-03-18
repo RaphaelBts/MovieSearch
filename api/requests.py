@@ -37,6 +37,12 @@ def getAllMovieTheaters(api="https://www.cinemaspathegaumont.com/api"):
     return res
 
 
+def getMovieTheaterShows(movieTheater, api='https://www.cinemaspathegaumont.com/api'):
+    url = f'{api}/cinema/{movieTheater}/shows'
+    res = scrappe(url)
+    return res["shows"]
+
+
 def getShowsZone(zone, api="https://www.cinemaspathegaumont.com/api"):
     url = f'{api}/zone/{zone}'
     res = scrappe(url)
