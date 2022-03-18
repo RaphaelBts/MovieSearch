@@ -56,6 +56,7 @@ patternList = [
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
         'intent': 'All movie screening in ... days in cinema ...' # authorized date : in x days (maximum 14 days)
+        # done
     },
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*((of|for)(\sthe)?(\s(film|movie)?))\\s*(?P<moviename>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
