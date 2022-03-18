@@ -25,6 +25,10 @@ def Default():
 
 def Hello(namedGroups={}):
     greeting = (namedGroups.get("greeting") if namedGroups.get("greeting") is not None else " ")
+    # avoid problems
+    if greeting == "":
+        return None
+
     return f'{greeting} you !'
 
 
@@ -37,8 +41,11 @@ def Help():                                                                     
 
 
 def MovieInfos(namedGroups={}):
+    movie = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
+    # avoid problems
+    if movie == "":
+        return None
 
-    movie = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "")
     infos = getMovieInfos(apiSearch(movie))
 
     title = infos['title']
@@ -52,8 +59,11 @@ def MovieInfos(namedGroups={}):
 
 #region MovieByType (genre or new movies)
 def MovieByType(namedGroups={}): # vrmt compris l'utilité de cette fonction 
+    movieType = (namedGroups.get("type") if namedGroups.get("type") is not None else "").rstrip()
+    # avoid problems
+    if movieType == "":
+        return None
 
-    movieType = (namedGroups.get("type") if namedGroups.get("type") is not None else "")
     genresList = ['Fantaisie',] # get the genre list -> a completer
 
     if movieType in genresList:
@@ -116,8 +126,13 @@ def Events():
 
 
 def MoviesByActor(namedGroups={}):
-    actor = (namedGroups.get("actor") if namedGroups.get("actor") is not None else "")
+    actor = (namedGroups.get("actor") if namedGroups.get("actor") is not None else "").rstrip()
+    # avoid problems
+    if actor == "":
+        return None
+
     all_shows = getAllShows()
+
     movies = [
         mov 
         for mov in all_shows 
@@ -130,18 +145,24 @@ def MoviesByActor(namedGroups={}):
 
 
 def MoviesByDirector(namedGroups={}):
-    director = (namedGroups.get("director") if namedGroups.get("director") is not None else "")
+    director = (namedGroups.get("director") if namedGroups.get("director") is not None else "").rstrip()
+    # avoid problems
+    if director == "":
+        return None
+
     all_shows = getAllShows()
-    
-    movies = [mov for mov in all_shows if director in mov["directors"]]
-    movieTitles = [mov["title"] for mov in movies]
+    movieTitles = [mov["title"] for mov in all_shows if director in mov["directors"]]
     
     res = f'Movies directed by {director}:\n' 
     return res + '\n'.join(movieTitles)
     
 
 def TodayFilmsByLocation(namedGroups={}):
-    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").lower()
+    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
+    # avoid problems
+    if location == "":
+        return None 
+
     shows = getShowsZone(location)
 
     movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
@@ -152,8 +173,11 @@ def TodayFilmsByLocation(namedGroups={}):
 
 def MovieShowTimesTodayTomorrowCinema(namedGroups={}):
     movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
-    time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").lower()
+    time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
     theaterName = (namedGroups.get("movie_theater_name") if namedGroups.get("movie_theater_name") is not None else "").rstrip().lower()
+    # avoid problems
+    if movieName == "" or time == "" or theaterName == "":
+        return None
 
     infos = getMovieInfos(apiSearch(movieName))
     if type(infos) == dict and "slug" in infos.keys():
@@ -184,18 +208,18 @@ def MovieShowtimesDaysCinema(namedGroups={}):
     date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
     detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
     theaterName = (namedGroups.get("movie_theater_name") if namedGroups.get("movie_theater_name") is not None else "").rstrip().lower()
-
-    # eviter les problemes
-    if movieName == "" or date == "" or detail == "" or theaterName == "":
+    # avoid problems
+    if movieName == "" or detail == "" or theaterName == "":
         return None
 
-    infos = getMovieInfos(apiSearch(movieName))
-    if type(infos) == dict and "slug" in infos.keys():
-        slug = infos["slug"]
     if date == "":
         formatDate = getTimeDate(0, detail)
     else:
         formatDate = getTimeDate(int(date), detail)
+
+    infos = getMovieInfos(apiSearch(movieName))
+    if type(infos) == dict and "slug" in infos.keys():
+        slug = infos["slug"]
     theater = 'cinema-' + theaterName.replace('é', 'e').replace(' ', '-')
 
     showTimes = [
@@ -209,12 +233,14 @@ def MovieShowtimesDaysCinema(namedGroups={}):
     return res
 
 
-
 def ShowtimesByLocationinNbDays(namedGroups={}):
-    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").lower()
+    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
     date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
-    detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "")
-    
+    detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
+    # avoid problems
+    if location == "" or detail == "":
+        return None
+
     if date == "":
         formatDate = getTimeDate(0, detail)
     else:
@@ -248,8 +274,6 @@ def getTimeDate(nbDays, details):
         res = (datetime.today().date() + timedelta(days=nbDays)).strftime("%Y-%m-%d")
     
     return res
-
-        
 
   
 def ListGenres():

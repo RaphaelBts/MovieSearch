@@ -36,7 +36,7 @@ async def on_message(message):
         time.sleep(2)
     
     await message.channel.send(response)
-    print(f'<{len(response)}> characters has been send to Discord!')
+    print(f'\033[92m<{len(response)}> characters has been send to Discord!\033[0m')
 
 def getChunks(text, chunksize=2000):
     chunks = []

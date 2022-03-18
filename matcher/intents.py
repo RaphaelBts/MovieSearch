@@ -35,35 +35,41 @@ def getResponse(intent, namedGroups):
     # dictionnary with intent as key and response message as value
     responseDict = {
         'Default': Default(),
-        'Hello': Hello(namedGroups) if 'greeting' in namedGroups.keys() else None,
+        'Hello': Hello(namedGroups),
         'Exit': Exit(),
         'Help': Help(),
-        'Movie info': MovieInfos(namedGroups) if 'moviename' in namedGroups.keys() else None,
-        'Movie by type': MovieByType(namedGroups) if 'type' in namedGroups.keys() else None,
+        'Movie info': MovieInfos(namedGroups),
+        'Movie by type': MovieByType(namedGroups),
         'Coming soon': MoviesComingSoon(),
         'Event': Events(),
         'List of genres': ListGenres(),
-        'Movie by actor': MoviesByActor(namedGroups) if 'actor' in namedGroups.keys() else None,
-        'Movie by director': MoviesByDirector(namedGroups) if 'director' in namedGroups.keys() else None,
-        'Available films today by location': TodayFilmsByLocation(namedGroups) if 'location' in namedGroups.keys() else None,
+        'Movie by actor': MoviesByActor(namedGroups),
+        'Movie by director': MoviesByDirector(namedGroups),
+        'Available films today by location': TodayFilmsByLocation(namedGroups),
         'Movie screening for movie ... today/tomorrow in cinema ...': MovieShowTimesTodayTomorrowCinema(namedGroups),
         'Movie screening for movie ... in ... days in cinema ...': MovieShowtimesDaysCinema(namedGroups),
         #'Films dispo dans x jour/heure à la localisation y' : ShowtimesByLocationinNbDays(namedGroups),
        # 'Seances film x cinema y' :
     }
-    for key,value in responseDict.items():
-        if key == intent :
-            return responseDict[intent]
+
+    if intent not in responseDict.keys():
+        return 'Intent is not recognized.'
+    else:
+        res = responseDict.get(intent)
+        if res is None:
+            return 'Reponse is None'
+        else:
+            return res
 
 
 def botResponse(message):
 
     # get the intent and captured named groups
     intent, namedGroup = getIntent(message)
-    print(intent, namedGroup)
+    print(intent)
+    print(namedGroup)
 
     # get the response
-    response = getResponse(intent, namedGroup) ## l'erreur est ici 
-    print(response)
-    print(intent, namedGroup)
+    response = getResponse(intent, namedGroup)
+
     return response

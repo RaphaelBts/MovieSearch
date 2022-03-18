@@ -22,9 +22,6 @@ def getMovieShowtimes(movieName, theaterName, date="", api="https://www.cinemasp
     if date != "":
         url += f'/{date}'
     res = scrappe(url)
-    print("you")
-    print([x  for x in res])
-    print("agin")
     return res
 
 

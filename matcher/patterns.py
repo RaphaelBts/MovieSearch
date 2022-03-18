@@ -17,7 +17,7 @@ patternList = [
     },
     ### Zone   ##########################################################################################################
     {
-        'pattern': '(.*\\s[I-i]nfo(s)?|[I-i]nformation(s)?)\\s(about|on)\\s(the\\s(film(s)?|movie(s)?)\\s)?(?P<moviename>\\w+(\\s\\w+)*)',
+        'pattern': '(.*[I-i]nfo(s)?|[I-i]nformation(s)?)\\s(about|on)\\s(the\\s(film(s)?|movie(s)?)\\s)?(?P<moviename>\\w+(\\s\\w+)*)',
         'intent': 'Movie info'
         # done
     },
@@ -56,12 +56,12 @@ patternList = [
         'intent': 'Toutes les seances dans y jours cinema x' # authorized date : in x days (maximum 14 days)
     },
     {
-        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*(?P<moviename>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
+        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*(of(\\sthe)?(\\s(film|movie)?)?)?\\s*(?P<moviename>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
         'intent': 'Movie screening for movie ... today/tomorrow in cinema ...' # date : today or tomorrow only
         # done
     },
     {
-        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*(?P<moviename>.*)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
+        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*(of(\\sthe)?(\\s(film|movie)?)?)?\\s*(?P<moviename>.*)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
         'intent': 'Movie screening for movie ... in ... days in cinema ...' # authorized date : in x days (maximum 14 days)
         # done
     },
