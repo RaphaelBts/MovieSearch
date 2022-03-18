@@ -330,6 +330,37 @@ def MovieScreeningsTodayTomorrowLocation(namedGroups={}):
     return res
 
 
+def MovieScreeningsDaysLocation(namedGroups={}):
+    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
+    movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
+    date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
+    detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
+    # avoid problems
+    if location == "" or detail == "" or movieName == "":
+        return None
+
+    infos = getMovieInfos(apiSearch(movieName))
+    if type(infos) == dict and "slug" in infos.keys():
+        slug = infos["slug"]
+    else:
+        slug = ""
+    if date == "":
+        formatDate = getTimeDate(0, detail)
+    else:
+        formatDate = getTimeDate(int(date), detail)
+    city = location.replace('é', 'e').replace(' ', '-')
+    movieTheaters = CINEMA_DICT.get(city)
+
+    showTimes = {
+        theater : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]] for res in getMovieShowtimes(slug, theater, date=formatDate)]
+        for theater in movieTheaters
+    }
+
+    res = f'Screenings available for {movieName} in {date} days ( {formatDate} ) in {location}:\n'
+    res += '\n\n'.join([theater + '\n' + '\n'.join(['\t'.join(screen) for screen in showTimes[theater]]) for theater in showTimes.keys()])
+    return res
+
+
 def getTimeDate(nbDays, details):
     res = ""
 
