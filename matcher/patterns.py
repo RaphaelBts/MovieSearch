@@ -25,6 +25,7 @@ patternList = [
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s(with)\\s(the\\sactor)?(Mr|Mrs)?(\\.)?(?P<actor>.*)',
         'intent': 'Movie by actor'
         # done
+        # movies with actor Tom Holland not working (the !!!)
     },
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(directed\\sby)\\s(the\\sdirector)?(Mr|Mrs)?(\\.)?(?P<director>.*)',

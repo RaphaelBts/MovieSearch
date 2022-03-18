@@ -133,12 +133,8 @@ def MoviesByActor(namedGroups={}):
 
     all_shows = getAllShows()
 
-    movies = [
-        mov 
-        for mov in all_shows 
-        if actor in mov["hubbleCasting"]
-    ]
-    movieTitles = [mov["title"] for mov in movies]
+    movies = [x for x in all_shows if x["hubbleCasting"] is not None]
+    movieTitles = [mov["title"] for mov in movies if actor in mov["hubbleCasting"].split(',')]
 
     res = f'Movies played by {actor}:\n'
     return res + '\n'.join(movieTitles)
@@ -151,7 +147,8 @@ def MoviesByDirector(namedGroups={}):
         return None
 
     all_shows = getAllShows()
-    movieTitles = [mov["title"] for mov in all_shows if director in mov["directors"]]
+    movies = [x for x in all_shows if x["directors"] is not None]
+    movieTitles = [mov["title"] for mov in movies if director in mov["directors"]]
     
     res = f'Movies directed by {director}:\n' 
     return res + '\n'.join(movieTitles)
