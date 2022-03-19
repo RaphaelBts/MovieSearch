@@ -24,6 +24,7 @@ async def on_message(message):
     # avoid self response
     if message.author == client.user:
         return
+    print("BEFORE BOT RESPONSE")
     response = botResponse(message.content)
 
     response = response[:5000]

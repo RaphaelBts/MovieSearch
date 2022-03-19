@@ -30,7 +30,7 @@ def getIntent(message):
     for obj in patternList:
         pattern = obj["pattern"]
         r = re.search(pattern, message)
-        if r:
+        if r is not None:
             # return the intent and the captured groups find by the regular expression
             return obj["intent"], r.groupdict()
     
@@ -61,7 +61,7 @@ def getResponse(intent, namedGroups):
         'All movies screening today/tomorrow in ...' : AllScreeningsTodayTomorrowLocation(namedGroups),
         'Movie screening for movie ... today/tomorrow in ...': MovieScreeningsTodayTomorrowLocation(namedGroups),
         'Movie screening for movie ... in ... days in ...': MovieScreeningsDaysLocation(namedGroups),
-        'GetRecommendation': GetTrend(namedGroups)
+        'Get recommendation': GetTrend(namedGroups)
     }
 
     if intent not in responseDict.keys():
@@ -75,7 +75,7 @@ def getResponse(intent, namedGroups):
 
 
 def botResponse(message):
-
+    print("IN BOT RESPONSE")
     # get the intent and captured named groups
     intent, namedGroup = getIntent(message)
     print(intent)

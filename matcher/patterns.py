@@ -106,13 +106,13 @@ patternList = [
     },
     ##############################################################################################################
     {
-        'pattern':'.*\\s*(event)\\s*.*',
+        'pattern':'.*\\s*([E-e]vent)\\s*.*',
         'intent': 'Event'
         # done
     },
     {
         'pattern':'.*\\s*(?P<trend>[M-m]ost\\spopular\\smovies|[R-r]ecommendation|[M-m]ost\\sliked\\smovies|[T-t]rending\\smovies)\\s*.*',
-        'intent': 'Get recommandation'
+        'intent': 'Get recommendation'
     },
     {
         'pattern':'.*\\s*(coming\\s*soon)\\s*.*',
