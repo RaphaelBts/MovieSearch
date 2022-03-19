@@ -19,13 +19,13 @@ patternList = [
     {
         'pattern': '(.*[I-i]nfo(s)?|[I-i]nformation(s)?)\\s(about|on)\\s(the\\s(film(s)?|movie(s)?)\\s)?(?P<moviename>\\w+(\\s\\w+)*)',
         'intent': 'Movie info'
-        # done + tested 
+        # done + tested + quasi form  ################################# WARNING PATTERN PAS TOTALEMENT BLINDE (il etait une fois...)
     },
     {
-        'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s(with)\\s(the\\sactor)?(Mr|Mrs)?(\\.)?(?P<actor>.*)',
+        'pattern':'.*(?P<greeting>[F-f]ilm(s)?|[M-m]ovie(s)?)\\s(with)\\s(the\\sactor)?(Mr|Mrs)?(\\.)?(?P<actor>.*)',
         'intent': 'Movie by actor'
-        # done 
-        # movies with actor Tom Holland not working (the !!!)
+        # done + tested + quasi forme  (je rajouterai peut etre le genre... en bonus) et date un peu useless...
+        # movies with actor Tom Holland not working (the !!!) = resolved 
     },
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(directed\\sby)\\s(the\\sdirector)?(Mr|Mrs)?(\\.)?(?P<director>.*)',

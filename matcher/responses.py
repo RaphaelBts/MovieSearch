@@ -53,13 +53,15 @@ def MovieInfos(namedGroups={}):
     released_date = infos['releaseAt']['FR_FR']
     director = infos['directors']
     synopsis = infos['synopsis']
+    titleUrlFormat = titleUrl(title)
+    link = f'https://www.cinemaspathegaumont.com/films/{titleUrlFormat}'
     poster = infos['posterPath']['lg']
 
-    return f'Title: {title}\nReleased date: {released_date}\nDirected by: {director}\nSynopsis: {synopsis}\nPoster link: {poster}'
+    return f'**Link page**: {link} \n**Title** : {title} \n**Released date** : {released_date}\n**Directed by** : {director}\n**Synopsis** : *{synopsis}*\n\n' # on peut remettre poster stv
 
 
 #region MovieByType (genre or new movies)
-def MovieByType(namedGroups={}): # vrmt compris l'utilité de cette fonction 
+def MovieByType(namedGroups={}): 
     movieType = (namedGroups.get("type") if namedGroups.get("type") is not None else "").rstrip()
     # avoid problems
     if movieType == "":
@@ -104,10 +106,10 @@ def MoviesComingSoon():  # 24  6 mois c'est assez
     for mov in movies : 
         moviesOrder[mov["title"]]=mov["releaseAt"][0]
         moviesOrdered = OrderedDict(sorted(moviesOrder.items(), key = lambda x:datetime.strptime(x[1], "%Y-%m-%d"), reverse=False))
-    x = itertools.islice(moviesOrdered.items(), 0, 50)
+    moviesListSliced = itertools.islice(moviesOrdered.items(), 0, 50)
     res = '**Movies coming soon** : \n'
     keys=[0]
-    for titles,releaseDate in x:
+    for titles,releaseDate in moviesListSliced:
         date_datetime = datetime.strptime(releaseDate, "%Y-%m-%d")
         reformated_date = date_datetime.strftime("%d-%m-%Y")
         keys.append(date_datetime.month)
@@ -126,22 +128,28 @@ def Events():
     return res + '\n'.join(movieTitles)
 
 
-def MoviesByActor(namedGroups={}):
+def MoviesByActor(namedGroups={}):  # faudrait une autre fonctio qui utilise SEARCH : pcq la c'est que les currently available...
     actor = (namedGroups.get("actor") if namedGroups.get("actor") is not None else "").rstrip()
     # avoid problems
     if actor == "":
         return None
-
+    actor = actor.lower().title() #raph est passé par là
     all_shows = getAllShows()
-
     movies = [x for x in all_shows if x["hubbleCasting"] is not None]
-    movieTitles = [mov["title"] for mov in movies if actor in mov["hubbleCasting"].split(',')]
+    movieTitles = {mov["title"]:mov["releaseAt"][0] for mov in movies if actor in mov["hubbleCasting"]} 
+    typoMoviesFilms = namedGroups.get("greeting").title() + 's' if namedGroups.get("greeting")[-1]!='s' else  namedGroups.get("greeting").title() ## ATTENTION PAS FORCEMENT UNE BONNE IDEE 
+    res = f'{typoMoviesFilms} available played by **{actor}**  :\n\n'
 
-    res = f'Movies played by {actor}:\n'
-    return res + '\n'.join(movieTitles)
+    for movietitle, releasedate in movieTitles.items(): 
+         titleforUrl = titleUrl(movietitle)
+         res += '*'+ str(datetime.strptime(releasedate, "%Y-%m-%d").year) +'*'+'   |  '+'**'+movietitle+'**  '+ f'https://www.cinemaspathegaumont.com/films/{titleforUrl}'+'\n' #pareil
+    return res
 
+def titleUrl(movietitle): # A perfectionner il etait une fois ... pas pris en compte des ... peut etre des guillemets aussi.. 
+    titleUrlFormat = movietitle.lower().replace(";","").replace(":","").replace(",","").replace("  "," ").replace(" ", "-").replace("'","-")
+    return titleUrlFormat
 
-def MoviesByDirector(namedGroups={}):
+def MoviesByDirector(namedGroups={}): #meme modif que movies by actor si " validé "
     director = (namedGroups.get("director") if namedGroups.get("director") is not None else "").rstrip()
     # avoid problems
     if director == "":
