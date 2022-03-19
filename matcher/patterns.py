@@ -19,19 +19,22 @@ patternList = [
     {
         'pattern': '(.*[I-i]nfo(s)?|[I-i]nformation(s)?)\\s(about|on)\\s(the\\s(film(s)?|movie(s)?)\\s)?(?P<moviename>\\w+(\\s\\w+)*)',
         'intent': 'Movie info'
-        # done + tested + quasi form  ################################# WARNING PATTERN PAS TOTALEMENT BLINDE (il etait une fois...)
+        # done + tested + quasi form  ################################# WARNING PATTERN PAS TOTALEMENT BLINDE il prends pas les points je crois (il etait une fois...)
     },
     {
-        'pattern':'.*(?P<greeting>[F-f]ilm(s)?|[M-m]ovie(s)?)\\s(with)\\s(the\\sactor)?(Mr|Mrs)?(\\.)?(?P<actor>.*)',
+        'pattern':'.*(?P<greeting>[F-f]ilm(s)?|[M-m]ovie(s)?)\\s(with|play by|played by)\\s?(the\\sactor)?\s(Mr|Mrs)?(\\.)?(?P<actor>.*)',
         'intent': 'Movie by actor'
-        # done + tested + quasi forme  (je rajouterai peut etre le genre... en bonus) et date un peu useless...
+        # done + tested + quasi forme++  (je rajouterai peut etre le genre... en bonus) et date un peu useless...
         # movies with actor Tom Holland not working (the !!!) = resolved 
     },
     {
-        'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(directed\\sby)\\s(the\\sdirector)?(Mr|Mrs)?(\\.)?(?P<director>.*)',
+        'pattern':'.*(?P<greeting>[F-f]ilm(s)?|[M-m]ovie(s)?)\\s(directed by|directed|by)\\s?(the\\sdirector)?\\s(Mr|Mrs)?(\\.)?(?P<director>.*)',
         'intent': 'Movie by director'
-        # done
+        # done + tested + quasi forme++
+        # added extra queries
     },
+    
+    # ancien pattern , obsolete '.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(directed\\sby)\\s(the\\sdirector)?(Mr|Mrs)?(\\.)?(?P<director>.*)'
     ##############################################################################################################
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\sscreen)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(in\\s*)?(?P<location>\\w+(\\s\\w+)*)',
@@ -39,12 +42,12 @@ patternList = [
     },
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\s*screen)\\s*(at\\s*|in\\s*)?(?P<location>\\w+(\\s\\w+)*)\\s(?P<time>now|today|currently)',
-        'intent': 'Available films today by location' # location = city
+        'intent': 'Available films today by location' # location = city   
         # done
     },
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\s*screen)\\s*(at\\s*|in\\s*)?(?P<location>\\w+(\\s\\w+)*)',
-        'intent': 'Available films today by location' # location = city
+        'intent': 'Available films today by location' # location = city  # l'utilisateur peut niquer le bot en rajoutant tomorrow et d'autres champs apres le lieu...=>trigger ce pattern
         # done 
     },
     ### Zone movie theater ##########################################################################################################

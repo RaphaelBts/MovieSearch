@@ -53,8 +53,8 @@ def MovieInfos(namedGroups={}):
     released_date = infos['releaseAt']['FR_FR']
     director = infos['directors']
     synopsis = infos['synopsis']
-    titleUrlFormat = titleUrl(title)
-    link = f'https://www.cinemaspathegaumont.com/films/{titleUrlFormat}'
+    slug = infos['slug']
+    link = f'https://www.cinemaspathegaumont.com/films/{slug}'
     poster = infos['posterPath']['lg']
 
     return f'**Link page**: {link} \n**Title** : {title} \n**Released date** : {released_date}\n**Directed by** : {director}\n**Synopsis** : *{synopsis}*\n\n' # on peut remettre poster stv
@@ -119,7 +119,7 @@ def MoviesComingSoon():  # 24  6 mois c'est assez
     return res
 
 
-def Events():
+def Events(): #marche pas
     all_shows = getAllShows()
     movies = [mov for mov in all_shows if mov["isEventSpecial"]]
     movieTitles = [mov["title"] for mov in movies]
@@ -136,32 +136,62 @@ def MoviesByActor(namedGroups={}):  # faudrait une autre fonctio qui utilise SEA
     actor = actor.lower().title() #raph est passé par là
     all_shows = getAllShows()
     movies = [x for x in all_shows if x["hubbleCasting"] is not None]
-    movieTitles = {mov["title"]:mov["releaseAt"][0] for mov in movies if actor in mov["hubbleCasting"]} 
+    moviesTitles =dict()
+    slug = dict()
+    for mov in movies :
+        if actor in mov["hubbleCasting"]:
+            moviesTitles[mov["title"]]=mov["releaseAt"][0]
+            slug[mov["title"]]=mov["slug"]
+    if moviesTitles =={}:
+        return f"Sorry ! It seems that {actor} isn't part of the hubble casting of any current movies"
     typoMoviesFilms = namedGroups.get("greeting").title() + 's' if namedGroups.get("greeting")[-1]!='s' else  namedGroups.get("greeting").title() ## ATTENTION PAS FORCEMENT UNE BONNE IDEE 
     res = f'{typoMoviesFilms} available played by **{actor}**  :\n\n'
 
-    for movietitle, releasedate in movieTitles.items(): 
-         titleforUrl = titleUrl(movietitle)
-         res += '*'+ str(datetime.strptime(releasedate, "%Y-%m-%d").year) +'*'+'   |  '+'**'+movietitle+'**  '+ f'https://www.cinemaspathegaumont.com/films/{titleforUrl}'+'\n' #pareil
+    for movietitle, releasedate in moviesTitles.items(): 
+         res += '*'+ str(datetime.strptime(releasedate, "%Y-%m-%d").year) +'*'+'   '+'**'+movietitle+'**  '+ f'https://www.cinemaspathegaumont.com/films/{slug[movietitle]}'+'\n' #pareil
     return res
 
-def titleUrl(movietitle): # A perfectionner il etait une fois ... pas pris en compte des ... peut etre des guillemets aussi.. 
-    titleUrlFormat = movietitle.lower().replace(";","").replace(":","").replace(",","").replace("  "," ").replace(" ", "-").replace("'","-")
-    return titleUrlFormat
+# #Deprecated..
+# def titleUrl(movietitle): # A perfectionner il etait une fois ... pas pris en compte des ... peut etre des guillemets aussi.. 
+#     titleUrlFormat = movietitle.lower().replace(";","").replace(":","").replace(",","").replace("  "," ").replace(" ", "-").replace("'","-")
+#     return titleUrlFormat
 
 def MoviesByDirector(namedGroups={}): #meme modif que movies by actor si " validé "
     director = (namedGroups.get("director") if namedGroups.get("director") is not None else "").rstrip()
     # avoid problems
     if director == "":
         return None
-
+    director = director.lower().title() 
     all_shows = getAllShows()
     movies = [x for x in all_shows if x["directors"] is not None]
-    movieTitles = [mov["title"] for mov in movies if director in mov["directors"]]
+    moviesTitles =dict()
+    slug = dict()
+
+    for mov in movies :
+        if director in mov["directors"]:
+            moviesTitles[mov["title"]]=mov["releaseAt"][0]
+            slug[mov["title"]]=mov["slug"]
+    if moviesTitles =={}:
+        return f"Sorry ! It seems that {director} didn't produce any current movies. Please also check if he is a producer."
+    typoMoviesFilms = namedGroups.get("greeting").title() + 's' if namedGroups.get("greeting")[-1]!='s' else  namedGroups.get("greeting").title() ## ATTENTION PAS FORCEMENT UNE BONNE IDEE 
+    res = f'{typoMoviesFilms} available produced by **{director}**  :\n\n'
+
+    for movietitle, releasedate in moviesTitles.items(): 
+         res += '*'+ str(datetime.strptime(releasedate, "%Y-%m-%d").year) +'*'+'    '+'**'+movietitle+'**  '+ f'https://www.cinemaspathegaumont.com/films/{slug[movietitle]}'+'\n' #pareil
+    return res
+
+    # all_shows = getAllShows()
+    # movies = [x for x in all_shows if x["directors"] is not None]
+    # movieTitles = [mov["title"] for mov in movies if director in mov["directors"]]
     
-    res = f'Movies directed by {director}:\n' 
-    return res + '\n'.join(movieTitles)
+    # res = f'Movies directed by {director}:\n' 
+    # return res + '\n'.join(movieTitles)
     
+# def titleReformat(slug):
+#     title = slug.lower().replace("-"," ")
+#     titleUrlFormat = movietitle.lower().replace(";","").replace(":","").replace(",","").replace("  "," ").replace(" ", "-").replace("'","-")
+# #     return titleUrlFormat
+
 
 def TodayFilmsByLocation(namedGroups={}):
     location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
@@ -169,12 +199,20 @@ def TodayFilmsByLocation(namedGroups={}):
     if location == "":
         return None 
 
-    shows = getShowsZone(location)
-
-    movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
-
+    all_shows_zone = getShowsZone(location)
+    all_shows = getAllShows()
+    moviesTitles = {mov["slug"]:mov["title"] for mov in all_shows} # Add genre si time 
+    moviesSlugZone = { mov["slug"]:moviesTitles[mov["slug"]] for mov in all_shows_zone if mov["bookable"]}
     res = f'Movies available today in {location}:\n' 
-    return res + '\n'.join(movieTitles)
+    for slug, movietitle  in moviesSlugZone.items(): 
+        res += '  **'+movietitle+'**  '+ '\n' #pareil
+    return res
+
+
+    
+
+    # res = f'Movies available today in {location}:\n' 
+    # return res + '\n'.join(movieTitles)
 
 
 def ScreeningsTodayTomorrowCinema(namedGroups={}):
