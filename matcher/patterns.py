@@ -62,7 +62,7 @@ patternList = [
         # done
     },
     {
-        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*((of|for)(\sthe)?(\s(film|movie)?))\\s*(?P<moviename>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
+        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*((of|for)(\\sthe)?(\\s*(film|movie)?))\\s*(?P<moviename>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name>[P-p]athé.*|[G-g]aumont.*)',
         'intent': 'Movie screening for movie ... today/tomorrow in cinema ...' # date : today or tomorrow only
         # done
     },
@@ -109,6 +109,10 @@ patternList = [
         'pattern':'.*\\s*(event)\\s*.*',
         'intent': 'Event'
         # done
+    },
+    {
+        'pattern':'.*\\s*(?P<trend>[M-m]ost\\spopular\\smovies|[R-r]ecommendation|[M-m]ost\\sliked\\smovies|[T-t]rending\\smovies)\\s*.*',
+        'intent': 'Get recommandation'
     },
     {
         'pattern':'.*\\s*(coming\\s*soon)\\s*.*',
