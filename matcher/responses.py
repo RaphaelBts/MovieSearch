@@ -13,7 +13,6 @@ import requests
 
 import json
 from jsonpath_ng.ext import parse
-import jsonpath
 
 from api.requests import apiSearch, getMovieInfos, getAllShows, getShowsZone, getAllMovieTheaters, getMovieShowtimes, getMovieTheaterShows
 from api.requests import CITY_LIST, CINEMA_DICT
@@ -120,7 +119,7 @@ def MoviesComingSoon():  # 24  6 mois c'est assez
     return res
 
 
-def Events(): #marche pas
+def  Events(): #marche pas
     all_shows = getAllShows()
     movies = [mov for mov in all_shows if mov["isEventSpecial"]]
     movieTitles = [mov["title"] for mov in movies]
@@ -472,12 +471,12 @@ def GetTrend(namedGroups={},trending_index=15):
     list_likes=[]
     for m in all_movies:
         m_infos=getMovieInfos(m["slug"])
-        like_score=m_infos["feelings"["countEmotionLike"]]+2*m_infos["feelings"["countEmotionLove"]]-m_infos["feelings"["countEmotionDisappointed"]]
-        list_likes.append([like_score,m["Title"]])
+        like_score=m_infos["feelings"]["countEmotionLike"]+2*m_infos["feelings"]["countEmotionLove"]-m_infos["feelings"]["countEmotionDisappointed"]
+        list_likes.append([like_score,m["title"]])
     list_likes.sort(reverse=True)
     trending=list_likes[:trending_index]
     res=f'Current trending movies are :\n'
-    res += '\n'.join(trending[i][1] + '\t' + 'with a like score of ' + trending[i][0] for i in range(len(trending)))
+    res += '\n'.join(trending[i][1] + '\t' + 'with a like score of ' + str(trending[i][0]) for i in range(len(trending)))
     return res
 
 # Get a similarity score of all movies compared to one movie and return the most similar ones
@@ -485,20 +484,20 @@ def GetRecommendation(theaterName,namedGroups={}):
     movieName=namedGroups.get("moviename")
     moviesAvailable=getAllShows()
     movie_info=getMovieInfos(movieName)
-    movie_likes=movie_info["feelings"["countEmotionLike"]]+2*movie_info["feelings"["countEmotionLove"]]-movie_info["feelings"["countEmotionDisappointed"]]
+    movie_likes=movie_info["feelings"]["countEmotionLike"]+2*movie_info["feelings"]["countEmotionLove"]-movie_info["feelings"]["countEmotionDisappointed"]
     similarity_list=[]
     for m in moviesAvailable:
         similarity_score=0
         if(m["title"]!=movieName): #not calculating the similarity score for the movie (moviename)
             m_infos=getMovieInfos(m["slug"])
-            m_likes=m_infos["feelings"["countEmotionLike"]]+2*m_infos["feelings"["countEmotionLove"]]-m_infos["feelings"["countEmotionDisappointed"]]
+            m_likes=m_infos["feelings"]["countEmotionLike"]+2*m_infos["feelings"]["countEmotionLove"]-m_infos["feelings"]["countEmotionDisappointed"]
             similarity_score+=np.log(abs(movie_likes-m_likes))
             if(m["genres"][0]!=movie_info["genres"][0]):
                 similarity_score += 1    
             similarity_list.append([similarity_score,m["title"]])
     similarity_list.sort()
     res=f'Since {movieName} is not available, here are some similar movies you may like :\n'
-    res += '\n'.join(similarity_list[i][1] + '\t' + 'with a like score of ' + similarity_list[i][0] for i in range(len(similarity_list)))
+    res += '\n'.join(similarity_list[i][1] + '\t' + 'with a like score of ' + str(similarity_list[i][0]) for i in range(len(similarity_list)))
     return res
 
 def getTimeDate(nbDays, details):
