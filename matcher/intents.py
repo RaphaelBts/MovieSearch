@@ -23,7 +23,8 @@ from matcher.responses import (
     MovieScreeningsTodayTomorrowLocation,
     MovieScreeningsDaysLocation,
     GetTrend,
-    GetRecommendation)
+    # GetRecommendation
+    )
 
 
 def getIntent(message):
@@ -52,13 +53,13 @@ def getResponse(intent, namedGroups):
         'List of genres': ListGenres(),
         'Movie by actor': MoviesByActor(namedGroups),
         'Movie by director': MoviesByDirector(namedGroups),
-        'Available films today by location': TodayFilmsByLocation(namedGroups),
+        'Available films today/tomorrow by location': TodayFilmsByLocation(namedGroups),
         'All movie screening today/tomorrow in cinema ...': ScreeningsTodayTomorrowCinema(namedGroups),
         'All movie screening in ... days in cinema ...': ScreeningsDaysCinema(namedGroups),
         'Movie screening for movie ... today/tomorrow in cinema ...': MovieScreeningsTodayTomorrowCinema(namedGroups),
         'Movie screening for movie ... in ... days in cinema ...': MovieScreeningsDaysCinema(namedGroups),
-        'All movies screening in ... days in ...' : AllScreeningsDaysLocation(namedGroups),
         'All movies screening today/tomorrow in ...' : AllScreeningsTodayTomorrowLocation(namedGroups),
+        'All movies screening in ... days in ...' : AllScreeningsDaysLocation(namedGroups),
         'Movie screening for movie ... today/tomorrow in ...': MovieScreeningsTodayTomorrowLocation(namedGroups),
         'Movie screening for movie ... in ... days in ...': MovieScreeningsDaysLocation(namedGroups),
         'Get recommendation': GetTrend(namedGroups)
@@ -75,7 +76,6 @@ def getResponse(intent, namedGroups):
 
 
 def botResponse(message):
-    print("IN BOT RESPONSE")
     # get the intent and captured named groups
     intent, namedGroup = getIntent(message)
     print(intent)

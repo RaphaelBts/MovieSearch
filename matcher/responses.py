@@ -1,18 +1,7 @@
 from datetime import datetime, timedelta
 from collections import OrderedDict
-from email.utils import localtime
 
 import itertools
-from unicodedata import name
-
-import attr
-
-
-import re
-import requests
-
-import json
-from jsonpath_ng.ext import parse
 
 from api.requests import apiSearch, getMovieInfos, getAllShows, getShowsZone, getAllMovieTheaters, getMovieShowtimes, getMovieTheaterShows
 from api.requests import CITY_LIST, CINEMA_DICT
@@ -42,7 +31,7 @@ def Help():                                                                     
 
 
 def MovieInfos(namedGroups={}):
-    movie = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
+    movie = (namedGroups.get("moviename1") if namedGroups.get("moviename1") is not None else "").rstrip()
     # avoid problems
     if movie == "":
         return None
@@ -67,7 +56,12 @@ def MovieByType(namedGroups={}):
     if movieType == "":
         return None
 
-    genresList = ['Fantaisie',] # get the genre list -> a completer
+    genresList = [
+        'Action', 'Animation', 'Aventure', 'Biopic', 'Comédie', 'Comédie dramatique',
+        'Comédie musicale', 'Comédie romantique', 'Court métrage', 'Divers', 'Documentaire', 'Drame',
+        'Drame psychologique', 'Famille', 'Fantastique', 'Film musical', 'Guerre', 'Historique',
+        'Horreur / Epouvante', 'Policier / Espionnage', 'Romance', 'Science Fiction', 'Thriller',  'Western'
+    ]
 
     if movieType in genresList:
         res = MoviebyGenre(movieType.rstrip())
@@ -119,7 +113,7 @@ def MoviesComingSoon():  # 24  6 mois c'est assez
     return res
 
 
-def  Events(): #marche pas
+def Events(): #marche pas
     all_shows = getAllShows()
     movies = [mov for mov in all_shows if mov["isEventSpecial"]]
     movieTitles = [mov["title"] for mov in movies]
@@ -194,7 +188,7 @@ def MoviesByDirector(namedGroups={}): #meme modif que movies by actor si " valid
 
 
 def TodayFilmsByLocation(namedGroups={}):
-    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
+    location = (namedGroups.get("location2") if namedGroups.get("location2") is not None else "").rstrip().lower()
     # avoid problems
     if location == "":
         return None 
@@ -217,7 +211,7 @@ def TodayFilmsByLocation(namedGroups={}):
 
 def ScreeningsTodayTomorrowCinema(namedGroups={}):
     time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
-    theaterName = (namedGroups.get("movie_theater_name") if namedGroups.get("movie_theater_name") is not None else "").rstrip().lower()
+    theaterName = (namedGroups.get("movie_theater_name1") if namedGroups.get("movie_theater_name1") is not None else "").rstrip().lower()
     # avoid problems
     if time == "" or theaterName == "":
         return None
@@ -247,7 +241,7 @@ def ScreeningsTodayTomorrowCinema(namedGroups={}):
 def ScreeningsDaysCinema(namedGroups={}):
     date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
     detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
-    theaterName = (namedGroups.get("movie_theater_name") if namedGroups.get("movie_theater_name") is not None else "").rstrip().lower()
+    theaterName = (namedGroups.get("movie_theater_name2") if namedGroups.get("movie_theater_name2") is not None else "").rstrip().lower()
     # avoid problems
     if date == "" or detail == "" or theaterName == "":
         return None
@@ -274,9 +268,9 @@ def ScreeningsDaysCinema(namedGroups={}):
 
 
 def MovieScreeningsTodayTomorrowCinema(namedGroups={}):
-    movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
+    movieName = (namedGroups.get("moviename2") if namedGroups.get("moviename2") is not None else "").rstrip()
     time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
-    theaterName = (namedGroups.get("movie_theater_name") if namedGroups.get("movie_theater_name") is not None else "").rstrip().lower()
+    theaterName = (namedGroups.get("movie_theater_name3") if namedGroups.get("movie_theater_name3") is not None else "").rstrip().lower()
     # avoid problems
     if movieName == "" or time == "" or theaterName == "":
         return None
@@ -306,10 +300,10 @@ def MovieScreeningsTodayTomorrowCinema(namedGroups={}):
 
 
 def MovieScreeningsDaysCinema(namedGroups={}):
-    movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
+    movieName = (namedGroups.get("moviename3") if namedGroups.get("moviename3") is not None else "").rstrip()
     date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
     detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
-    theaterName = (namedGroups.get("movie_theater_name") if namedGroups.get("movie_theater_name") is not None else "").rstrip().lower()
+    theaterName = (namedGroups.get("movie_theater_name4") if namedGroups.get("movie_theater_name4") is not None else "").rstrip().lower()
     # avoid problems
     if movieName == "" or detail == "" or theaterName == "":
         return None
@@ -336,7 +330,7 @@ def MovieScreeningsDaysCinema(namedGroups={}):
 
 
 def AllScreeningsDaysLocation(namedGroups={}):
-    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
+    location = (namedGroups.get("location6") if namedGroups.get("location6") is not None else "").rstrip().lower()
     date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
     detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
     # avoid problems
@@ -370,7 +364,7 @@ def AllScreeningsDaysLocation(namedGroups={}):
 
 
 def AllScreeningsTodayTomorrowLocation(namedGroups={}):
-    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
+    location = (namedGroups.get("location5") if namedGroups.get("location5") is not None else "").rstrip().lower()
     time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
     # avoid problems
     if location == "" or time == "":
@@ -403,9 +397,9 @@ def AllScreeningsTodayTomorrowLocation(namedGroups={}):
 
 
 def MovieScreeningsTodayTomorrowLocation(namedGroups={}):
-    movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
+    movieName = (namedGroups.get("moviename4") if namedGroups.get("moviename4") is not None else "").rstrip()
     time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
-    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
+    location = (namedGroups.get("location3") if namedGroups.get("location3") is not None else "").rstrip().lower()
     # avoid problems
     if movieName == "" or time == "" or location == "":
         return None
@@ -435,8 +429,8 @@ def MovieScreeningsTodayTomorrowLocation(namedGroups={}):
 
 
 def MovieScreeningsDaysLocation(namedGroups={}):
-    location = (namedGroups.get("location") if namedGroups.get("location") is not None else "").rstrip().lower()
-    movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
+    location = (namedGroups.get("location4") if namedGroups.get("location4") is not None else "").rstrip().lower()
+    movieName = (namedGroups.get("moviename5") if namedGroups.get("moviename5") is not None else "").rstrip()
     date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
     detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
     # avoid problems
@@ -466,39 +460,57 @@ def MovieScreeningsDaysLocation(namedGroups={}):
 
 
 # Get the most liked movies actually on screen
-def GetTrend(namedGroups={},trending_index=15):
-    all_movies=getAllShows()
-    list_likes=[]
+def GetTrend(namedGroups={}, trending_index=15):
+    check = (namedGroups.get("trend") if namedGroups.get("trend") is not None else "")
+    # avoid problems
+    if check == "":
+        return None
+
+    all_movies = getAllShows()
+    list_likes = []
+
     for m in all_movies:
-        m_infos=getMovieInfos(m["slug"])
-        like_score=m_infos["feelings"]["countEmotionLike"]+2*m_infos["feelings"]["countEmotionLove"]-m_infos["feelings"]["countEmotionDisappointed"]
-        list_likes.append([like_score,m["title"]])
+        m_infos = getMovieInfos(m["slug"])
+        like_score = m_infos["feelings"]["countEmotionLike"] + 2*m_infos["feelings"]["countEmotionLove"] - m_infos["feelings"]["countEmotionDisappointed"]
+        if(m_infos["next24ShowtimesCount"] != 0):
+            list_likes.append([like_score, m["title"]])
+
     list_likes.sort(reverse=True)
-    trending=list_likes[:trending_index]
-    res=f'Current trending movies are :\n'
+    trending = list_likes[:trending_index]
+
+    res = f'Current trending movies are :\n'
     res += '\n'.join(trending[i][1] + '\t' + 'with a like score of ' + str(trending[i][0]) for i in range(len(trending)))
     return res
 
+
 # Get a similarity score of all movies compared to one movie and return the most similar ones
-def GetRecommendation(theaterName,namedGroups={}):
-    movieName=namedGroups.get("moviename")
-    moviesAvailable=getAllShows()
-    movie_info=getMovieInfos(movieName)
-    movie_likes=movie_info["feelings"]["countEmotionLike"]+2*movie_info["feelings"]["countEmotionLove"]-movie_info["feelings"]["countEmotionDisappointed"]
-    similarity_list=[]
+def GetRecommendation(theaterName, namedGroups={}):
+    movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
+    # avoid problems
+    if movieName == "": 
+        return None
+        
+    moviesAvailable = getAllShows()
+    movie_info = getMovieInfos(movieName)
+    movie_likes = movie_info["feelings"]["countEmotionLike"] + 2*movie_info["feelings"]["countEmotionLove"] - movie_info["feelings"]["countEmotionDisappointed"]
+    similarity_list = []
+    
     for m in moviesAvailable:
-        similarity_score=0
-        if(m["title"]!=movieName): #not calculating the similarity score for the movie (moviename)
-            m_infos=getMovieInfos(m["slug"])
-            m_likes=m_infos["feelings"]["countEmotionLike"]+2*m_infos["feelings"]["countEmotionLove"]-m_infos["feelings"]["countEmotionDisappointed"]
-            similarity_score+=np.log(abs(movie_likes-m_likes))
-            if(m["genres"][0]!=movie_info["genres"][0]):
+        similarity_score = 0
+        if(m["title"] != movieName): #not calculating the similarity score for the movie (moviename)
+            m_infos = getMovieInfos(m["slug"])
+            m_likes = m_infos["feelings"]["countEmotionLike"] + 2*m_infos["feelings"]["countEmotionLove"] - m_infos["feelings"]["countEmotionDisappointed"]
+            similarity_score += np.log(abs(movie_likes-m_likes))
+            if(m["genres"][0] != movie_info["genres"][0]):
                 similarity_score += 1    
-            similarity_list.append([similarity_score,m["title"]])
+            similarity_list.append([similarity_score, m["title"]])
+            
     similarity_list.sort()
-    res=f'Since {movieName} is not available, here are some similar movies you may like :\n'
+    
+    res = f'Since {movieName} is not available, here are some similar movies you may like :\n'
     res += '\n'.join(similarity_list[i][1] + '\t' + 'with a like score of ' + str(similarity_list[i][0]) for i in range(len(similarity_list)))
     return res
+
 
 def getTimeDate(nbDays, details):
     res = ""
