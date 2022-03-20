@@ -2,7 +2,7 @@ numpy==1.21.4
 aiohttp==3.7.3
 async-timeout==3.0.1
 attrs==20.3.0
-discord.py=1.7.3
+discord.py==1.7.3
 yarl==1.7.2
 multidict==5.1.0
 requests==2.26.0
