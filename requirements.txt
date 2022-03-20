@@ -9,4 +9,3 @@ requests==2.26.0
 requests-oauthlib==1.3.0
 requests-toolbelt==0.9.1
 discord==1.7.3
-movieSearch==1.0
