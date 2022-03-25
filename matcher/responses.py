@@ -195,11 +195,11 @@ def TodayFilmsByLocation(namedGroups={}):
 
     all_shows_zone = getShowsZone(location)
     all_shows = getAllShows()
-    moviesTitles = {mov["slug"]:mov["title"] for mov in all_shows} # Add genre si time 
+    moviesTitles = {mov["slug"]:[mov["title"],mov["genres"]] for mov in all_shows} # 
     moviesSlugZone = { mov["slug"]:moviesTitles[mov["slug"]] for mov in all_shows_zone if mov["bookable"]}
     res = f'Movies available today in {location}:\n' 
-    for slug, movietitle  in moviesSlugZone.items(): 
-        res += '  **'+movietitle+'**  '+ '\n' #pareil
+    for slug, movieinfos in moviesSlugZone.items(): 
+        res += '  **'+str(movieinfos[0])+'**  '+ ' | ' + str(movieinfos[1][0])+   f'https://www.cinemaspathegaumont.com/films/{slug}'+ '\n' #pareil
     return res
 
 
@@ -546,7 +546,7 @@ def GetRecommendation(movieName, theaterName=""):
     similarity_list.sort()
     
     res = f'Since {movie_info["title"]} is not available, here are some similar movies you may like :\n'
-    res += '\n'.join(similarity_list[i][1] + '\t' + 'with a like score of ' + str(similarity_list[i][0]) for i in range(len(similarity_list)))
+    res += '\n'.join(similarity_list[i][1] + '\t' + 'with a score of ' + str(similarity_list[i][0]) for i in range(10))
     return res
 
 
@@ -560,16 +560,22 @@ def getTimeDate(nbDays, details):
 
   
 def ListGenres():
-
-    shows = getAllShows()
-    genres = set() 
-    for show in shows : 
-          genres.add(show["genres"][0])
-    genres_sorted = sorted([genre for genre in genres if genre!='Non défini'])
+    genres="Action  |  Animation  |  Aventure  |  Biopic  |  Comédie | Comédie dramatique  |  Comédie musicale  |  Comédie romantique  |  Court métrage  |  Divers | Documentaire  |  Drame  |  Drame psychologique  |  Famille  |  Fantastique | Film musical  |  Guerre  |  Historique  |  Horreur / Epouvante  |  Policier / Espionnage | Romance  |  Science Fiction  |  Thriller  |  Western"
     str="** The Gaumont *genre* colllection** : \n\n"
-    for i in range(int(len(genres_sorted)/5+1)):
-        str+='  |  '.join(genres_sorted[i*5:(i+1)*5])+ "\n"  
+    for i in range(int(len(genres)/5+1)):
+        str+='  '.join(genres[i*5:(i+1)*5])+ "\n"  
     return str
+
+
+    # shows = getAllShows()
+    # genres = set() 
+    # for show in shows : 
+    #       genres.add(show["genres"][0])
+    # genres_sorted = sorted([genre for genre in genres if genre!='Non défini'])
+    # str="** The Gaumont *genre* colllection** : \n\n"
+    # for i in range(int(len(genres_sorted)/5+1)):
+    #     str+='  |  '.join(genres_sorted[i*5:(i+1)*5])+ "\n"  
+    # return str
 
 
     # str="**"

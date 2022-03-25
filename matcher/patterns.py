@@ -39,7 +39,7 @@ patternList = [
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\sscreen)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(in\\s*)?(?P<location1>\\w+(\\s\\w+)*)',
         'intent': 'Tous les films dispo dans x jour à la localisation y' # authorized date : in x days (maximum 14 days) # il faut inverser date et location (pr que ca soit conforme à tous les autres)
-    },
+    },   
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\s*screen)\\s*(at\\s*|in\\s*)?(?P<location2>\\w+(\\s\\w+)*)\\s(?P<time>now|today|currently|tomorrow)',
         'intent': 'Available films today/tomorrow by location' # location = city   
@@ -112,7 +112,7 @@ patternList = [
         'intent': 'List of genres'
     },   #done mise en forme quasi done 
     {
-        'pattern':'(?P<type>.*)([F-f]ilm(s)?|[M-m]ovie(s)?)',
+        'pattern':'(?P<type>\\w+)([F-f]ilm(s)?|[M-m]ovie(s)?)',
         'intent': 'Movie by type'
         # done pas capté la plus value
     }
