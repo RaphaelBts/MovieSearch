@@ -294,9 +294,12 @@ def MovieScreeningsTodayTomorrowCinema(namedGroups={}):
         if res["status"] == "available"
     ]
 
-    res = f'Screenings available for {movieName} {time} ( {formatDate} ) in {theaterName}:\n'
-    res += '\n'.join(['\t'.join(x) for x in showTimes])
-    return res
+    if showTimes == []:
+        return GetRecommendation(slug, theaterName)
+    else:
+        res = f'Screenings available for {movieName} {time} ( {formatDate} ) in {theaterName}:\n'
+        res += '\n'.join(['\t'.join(x) for x in showTimes])
+        return res
 
 
 def MovieScreeningsDaysCinema(namedGroups={}):
@@ -324,9 +327,12 @@ def MovieScreeningsDaysCinema(namedGroups={}):
         if x.get("status") == "available"
     ]
 
-    res = f'Screenings available for {movieName} in {date} {detail} ( {formatDate} ) in {theaterName}:\n'
-    res += '\n'.join(['\t'.join(x) for x in showTimes])
-    return res
+    if showTimes == []:
+        return GetRecommendation(slug, theaterName)
+    else:
+        res = f'Screenings available for {movieName} in {date} {detail} ( {formatDate} ) in {theaterName}:\n'
+        res += '\n'.join(['\t'.join(x) for x in showTimes])
+        return res
 
 
 def AllScreeningsDaysLocation(namedGroups={}):
@@ -423,9 +429,19 @@ def MovieScreeningsTodayTomorrowLocation(namedGroups={}):
         for theater in movieTheaters
     }
 
-    res = f'Screenings available for {movieName} {time} ( {formatDate} ) in {location}:\n'
-    res += '\n\n'.join([theater + '\n' + '\n'.join(['\t'.join(screen) for screen in showTimes[theater]]) for theater in showTimes.keys()])
-    return res
+    # Check if all cinemas does not project this movie
+    hasShowTimes = False
+    for k, v in showTimes.items():
+        if v != []:
+            hasShowTimes = True
+            pass
+
+    if hasShowTimes:
+        res = f'Screenings available for {movieName} {time} ( {formatDate} ) in {location}:\n'
+        res += '\n\n'.join([theater + '\n' + '\n'.join(['\t'.join(screen) for screen in showTimes[theater]]) for theater in showTimes.keys()])
+        return res
+    else:
+        return GetRecommendation(slug)
 
 
 def MovieScreeningsDaysLocation(namedGroups={}):
@@ -454,9 +470,19 @@ def MovieScreeningsDaysLocation(namedGroups={}):
         for theater in movieTheaters
     }
 
-    res = f'Screenings available for {movieName} in {date} days ( {formatDate} ) in {location}:\n'
-    res += '\n\n'.join([theater + '\n' + '\n'.join(['\t'.join(screen) for screen in showTimes[theater]]) for theater in showTimes.keys()])
-    return res
+    # Check if all cinemas does not project this movie
+    hasShowTimes = False
+    for k, v in showTimes.items():
+        if v != []:
+            hasShowTimes = True
+            pass
+    
+    if hasShowTimes:
+        res = f'Screenings available for {movieName} in {date} days ( {formatDate} ) in {location}:\n'
+        res += '\n\n'.join([theater + '\n' + '\n'.join(['\t'.join(screen) for screen in showTimes[theater]]) for theater in showTimes.keys()])
+        return res
+    else:
+        return GetRecommendation(slug)
 
 
 # Get the most liked movies actually on screen
@@ -484,30 +510,42 @@ def GetTrend(namedGroups={}, trending_index=15):
 
 
 # Get a similarity score of all movies compared to one movie and return the most similar ones
-def GetRecommendation(theaterName, namedGroups={}):
-    movieName = (namedGroups.get("moviename") if namedGroups.get("moviename") is not None else "").rstrip()
-    # avoid problems
-    if movieName == "": 
-        return None
-        
+def GetRecommendation(movieName, theaterName=""):
     moviesAvailable = getAllShows()
     movie_info = getMovieInfos(movieName)
     movie_likes = movie_info["feelings"]["countEmotionLike"] + 2*movie_info["feelings"]["countEmotionLove"] - movie_info["feelings"]["countEmotionDisappointed"]
     similarity_list = []
-    
+    if movie_info["actors"] is not None:
+        casting = [x.rstrip() for x in movie_info["actors"].split(",")]
+    else:
+        casting = []
+    if movie_info["directors"] is not None:
+        directors = [x.rstrip() for x in movie_info["directors"].split(",")]
+    else:
+        directors = []
+
     for m in moviesAvailable:
         similarity_score = 0
-        if(m["title"] != movieName): #not calculating the similarity score for the movie (moviename)
+        if(m["slug"] != movieName): #not calculating the similarity score for the movie (moviename)
             m_infos = getMovieInfos(m["slug"])
-            m_likes = m_infos["feelings"]["countEmotionLike"] + 2*m_infos["feelings"]["countEmotionLove"] - m_infos["feelings"]["countEmotionDisappointed"]
-            similarity_score += np.log(abs(movie_likes-m_likes))
-            if(m["genres"][0] != movie_info["genres"][0]):
-                similarity_score += 1    
-            similarity_list.append([similarity_score, m["title"]])
+            if(m_infos["next24ShowtimesCount"] != 0):
+                m_likes = m_infos["feelings"]["countEmotionLike"] + 2*m_infos["feelings"]["countEmotionLove"] - m_infos["feelings"]["countEmotionDisappointed"]
+                similarity_score += np.log(abs(movie_likes-m_likes)) if movie_likes-m_likes != 0 else 0
+                if(m["genres"][0] != movie_info["genres"][0]):
+                    similarity_score += 2
+                if m["hubbleCasting"] is not None:
+                    for actor in casting:
+                        if actor in m["hubbleCasting"]:
+                            similarity_score /= 2
+                if m["directors"] is not None:
+                    for director in directors:
+                        if actor in m["directors"]:
+                            similarity_score /= 2
+                similarity_list.append([similarity_score, m["title"]])
             
     similarity_list.sort()
     
-    res = f'Since {movieName} is not available, here are some similar movies you may like :\n'
+    res = f'Since {movie_info["title"]} is not available, here are some similar movies you may like :\n'
     res += '\n'.join(similarity_list[i][1] + '\t' + 'with a like score of ' + str(similarity_list[i][0]) for i in range(len(similarity_list)))
     return res
 

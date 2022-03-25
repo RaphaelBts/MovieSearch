@@ -100,7 +100,7 @@ patternList = [
     },
     {
         'pattern':'.*\\s*(?P<trend>[M-m]ost\\spopular\\smovies|[R-r]ecommendation|[M-m]ost\\sliked\\smovies|[T-t]rending\\smovies)\\s*.*',
-        'intent': 'Get recommendation'
+        'intent': 'Get trend'
     },
     {
         'pattern':'.*\\s*(coming\\s*soon)\\s*.*',

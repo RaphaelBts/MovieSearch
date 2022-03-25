@@ -62,7 +62,7 @@ def getResponse(intent, namedGroups):
         'All movies screening in ... days in ...' : AllScreeningsDaysLocation(namedGroups),
         'Movie screening for movie ... today/tomorrow in ...': MovieScreeningsTodayTomorrowLocation(namedGroups),
         'Movie screening for movie ... in ... days in ...': MovieScreeningsDaysLocation(namedGroups),
-        'Get recommendation': GetTrend(namedGroups)
+        'Get trend': GetTrend(namedGroups)
     }
 
     if intent not in responseDict.keys():
