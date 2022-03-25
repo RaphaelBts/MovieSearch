@@ -8,9 +8,7 @@ MovieSearch is a chatbot available on [Discord](https://discord.com) that will h
 - Finding the available screenings near you
 He will also recommand you some movies, based on what is popular today and on which movie you want to see.
 
-Based on real-time data, you will be able to easily find information you need and even book your tickets for your desired movie screening (if available of course).
-
-## Where does the data come from ?
+Based on **real-time data**, you will be able to easily find information you need and even book your tickets for your desired movie screening (if available of course).
 
 
 ## Tasks
@@ -28,7 +26,13 @@ Based on real-time data, you will be able to easily find information you need an
 - [ ] Bonus: add questions about preferences for recommender system content-based.
 - [ ] Bonus: Reservation system
 
-## Packages and librairies
+
+## Where does the data come from ?
+
+MovieSearch is based on a huge dataset, which is the Gaumont-Pathé API. Gaumont-Pathé is the biggest french movie theater company and so has recorded tons of data since its creation. All of the existing movies are available through this API. By requesting this API, we are able to get all the information we need, in order to fulfill your desires in terms of movies.
+
+## How to use MovieSearch ?
+### Packages and librairies
 
 Packages to install : discord.py
 ```
@@ -37,19 +41,41 @@ pip install discord.py
 pip install simple_colours
 pip install termcolor
 
-## Use movieSearch bot
+### Use movieSearch bot
 
-Build the movieSearch package:
+First, build the movieSearch package:
 ```
 pip install -e .
 ```
 
-Run the bot with
+Then, run the bot with
 ```
-python bot/bot.py
+python bot.py
+```
 or
-python3 bot/bot.py
 ```
+python3 bot.py
+```
+
+Once the bot is connected, challenge him up !
+
+
+## What can MovieSearch do ? 
+
+MovieSearch can give you information about movies:
+- Main information about a specific movie (example: Uncharted)
+```
+Information about the movie Uncharted
+```
+- Movies played as a certain actor (example: Tom Holland)
+```
+Movies played by Tom Holland
+```
+- Movies directed by a certain director (example: Matt Reeves)
+```
+Movies directed by Matt Reeves
+```
+
 
 ## Resources
 
