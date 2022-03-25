@@ -63,18 +63,23 @@ Once the bot is connected, challenge him up !
 ## What can MovieSearch do ? 
 
 MovieSearch can give you information about movies:
-- Main information about a specific movie (example: Uncharted)
+- **Main information about a specific movie** (example: Uncharted)
 ```
 Information about the movie Uncharted
 ```
-- Movies played as a certain actor (example: Tom Holland)
+- **Movies played as a certain actor** (example: Tom Holland)
 ```
 Movies played by Tom Holland
 ```
-- Movies directed by a certain director (example: Matt Reeves)
+- **Movies directed by a certain director** (example: Matt Reeves)
 ```
 Movies directed by Matt Reeves
 ```
+
+MovieSearch can give you all the movies that are available near you:
+- 
+- 
+
 
 
 ## Resources
