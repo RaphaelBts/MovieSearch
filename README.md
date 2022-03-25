@@ -1,9 +1,17 @@
 # MovieSearch
 
-MovieSearch is a chatbot that will help you find movies in movie theaters near you. 
-You will be able to ask him questions like:
-- Seance for movie xx at time xx ? 
-- If not available, suggests other movies or at a different time
+## Introduction
+
+MovieSearch is a chatbot available on [Discord](https://discord.com) that will help you find movies in movie theaters near you. Especially, he will assist you on tasks like:
+- Finding informations on a specific movie
+- Finding screenings of a speicifc movie near you
+- Finding the available screenings near you
+He will also recommand you some movies, based on what is popular today and on which movie you want to see.
+
+Based on real-time data, you will be able to easily find information you need and even book your tickets for your desired movie screening (if available of course).
+
+## Where does the data come from ?
+
 
 ## Tasks
 
