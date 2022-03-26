@@ -187,26 +187,63 @@ def MoviesByDirector(namedGroups={}): #meme modif que movies by actor si " valid
 # #     return titleUrlFormat
 
 
-def TodayFilmsByLocation(namedGroups={}):
+def FilmsTodayTomorrowByLocation(namedGroups={}):
     location = (namedGroups.get("location2") if namedGroups.get("location2") is not None else "").rstrip().lower()
+    time = (namedGroups.get("time") if namedGroups.get("time") is not None else "today").rstrip().lower()
     # avoid problems
-    if location == "":
-        return None 
+    if location == "" or time == "":
+        return None
 
-    all_shows_zone = getShowsZone(location)
-    all_shows = getAllShows()
-    moviesTitles = {mov["slug"]:[mov["title"],mov["genres"]] for mov in all_shows} # 
-    moviesSlugZone = { mov["slug"]:moviesTitles[mov["slug"]] for mov in all_shows_zone if mov["bookable"]}
-    res = f'Movies available today in {location}:\n' 
-    for slug, movieinfos in moviesSlugZone.items(): 
-        res += '  **'+str(movieinfos[0])+'**  '+ ' | ' + str(movieinfos[1][0])+   f'https://www.cinemaspathegaumont.com/films/{slug}'+ '\n' #pareil
+    if time == "today":
+        formatDate = getTimeDate(0, "days")
+    elif time == "tomorrow":
+        formatDate = getTimeDate(1, "days")
+    else:
+        return ""
+
+    shows = getShowsZone(location)
+    movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
+
+    # showsInfoDict = {
+    #     movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
+    #     for movieName in movieTitles
+    # }
+    
+    res = f'Movies available {time} ( {formatDate} ) in {location}:\n' 
+    for mov in movieTitles:
+        res += mov + '\n'
+
     return res
 
 
-    
+def FilmsDaysByLocation(namedGroups={}):
+    location = (namedGroups.get("location1") if namedGroups.get("location1") is not None else "").rstrip().lower()
+    date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
+    detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
+    # avoid problems
+    if location == "" or detail == "":
+        return None
 
-    # res = f'Movies available today in {location}:\n' 
-    # return res + '\n'.join(movieTitles)
+    if date == "":
+        formatDate = getTimeDate(0, detail)
+    else:
+        formatDate = getTimeDate(int(date), detail)
+
+    shows = getShowsZone(location)
+    movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
+
+    # showsInfoDict = {}
+    # if detail == "days":
+    #     showsInfoDict = {
+    #         movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
+    #         for movieName in movieTitles
+    #     }
+    
+    res = f'Movies available in {date} {detail} ( {formatDate} ) in {location}:\n' 
+    for mov in movieTitles:
+        res += mov + '\n :'
+        
+    return res
 
 
 def ScreeningsTodayTomorrowCinema(namedGroups={}):

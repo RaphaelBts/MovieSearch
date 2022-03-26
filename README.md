@@ -61,8 +61,8 @@ Once the bot is connected, challenge him up !
 
 
 ## What can MovieSearch do ? 
+### MovieSearch can give you information about movies:
 
-MovieSearch can give you information about movies:
 - **Main information about a specific movie** (example: Uncharted)
 ```
 Information about the movie Uncharted
@@ -75,12 +75,80 @@ Movies played by Tom Holland
 ```
 Movies directed by Matt Reeves
 ```
+- **Recent movies**
+```
+New movies
+```
+- **Movies of a certain genre** (example: Action)
+``` 
+Action movies
+```
 
-MovieSearch can give you all the movies that are available near you:
-- 
-- 
+### MovieSearch can give you movies that are available near you:
+
+- **Available movies on a specific date in a given city** (example: Angers)
+```
+Available movies tomorrow in Angers
+```
+```
+Available movies in 4 days in Angers
+```
+- **All screenings on a specific date in a given city** (example: Lyon)
+```
+Screenings tomorrow in Lyon
+```
+```
+Screenings in 4 days in Lyon
+```
+- **All screenings of a certain movie on a specific date in a given city** (example: movie Uncharted in Paris)
+```
+Screenings of Uncharted tomorrow in Paris
+```
+```
+Screenings of Uncharted in 4 days in Paris
+```
+
+### MovieSearch can give you screenings that are available in your favorite movie theater:
+
+- **All screenings on a specific date in your favorite movie theater** (example: Gaumont Alesia)
+```
+Screenings tomorrow in Gaumont Alesia
+```
+```
+Screenings in 4 days in Gaumont Alesia
+```
+- **All screenings of a certain movie on a specific date in your favorite movie theater** (example: movie Uncharted in Pathe Boulogne)
+```
+Screenings of Uncharted tomorrow in Pathe Boulogne
+```
+```
+Screenings of Uncharted in 4 days in Pathe Boulogne
+```
 
 
+## Client use cases 
+
+We can define some use cases that a user may use, while using movieSearch bot:
+
+If the user know the name of the movie he wants to watch, he will probably be in the use case 1.
+>   1) Movie info &rarr; Screenings (today // tomorrow // in x days) in (city // movie theater)
+
+If the user is looking for a movie, based of its genre, he will probably be in the use case 2.
+>   2) Genres list &rarr; Movies by genre &rarr; Use case 1
+
+If the user is looking for a movie, based of its actor or director, he will probably be in the use case 3.
+>   3) Movies by (actor // directors) &rarr; Use case 1
+
+If the user is looking for all movies available near him, he will probably be in the use case 4.
+>   4) Available films (today // tomorrow // in x days) in (city // movie theater) &rarr; Use case 1
+
+If the user is looking for all the screening available near him, he will probably be in the use case 5
+>   5) All screenings (today // tomorrow // in x days) in (city // movie theater)
+
+If the user is looking for trendings movies, he will probably be in the use case 6.
+>   6) Trends movies &rarr; Use case 1
+
+                                    
 
 ## Resources
 
