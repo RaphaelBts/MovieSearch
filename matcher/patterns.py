@@ -94,7 +94,7 @@ patternList = [
     {
         'pattern':'.*\\s*([E-e]vent)\\s*.*',
         'intent': 'Event'
-        # done
+        # done à refaire nan ? 
     },
     {
         'pattern':'.*\\s*(?P<trend>[M-m]ost\\spopular\\smovies|[R-r]ecommendation|[M-m]ost\\sliked\\smovies|[T-t]rending\\smovies)\\s*.*',
