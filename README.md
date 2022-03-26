@@ -11,22 +11,6 @@ He will also recommand you some movies, based on what is popular today and on wh
 Based on **real-time data**, you will be able to easily find information you need and even book your tickets for your desired movie screening (if available of course).
 
 
-## Tasks
-
-- [x] Choose between Python and Node for development. --> Python
-- [x] Website or Application that will host our chatbot (Discord, Facebook, Google, ...) --> Discord
-- [ ] How to collect movies data ? (API, Webcrapping, ...) ? 
-- [x] Where to collect them (Gaumont, UGC, ...) ? --> Gaumont
-- [x] How to store them (if needed) ? -> No storing for now, only API calls
-- [ ] Enumerate different possibles requests (API)
-- [ ] Test with a simple chatbot.
-- [ ] Improve the chatbot-user experience.
-- [ ] Implement recommendation system based on items vs items.
-- [ ] Do we need a server ?
-- [ ] Bonus: add questions about preferences for recommender system content-based.
-- [ ] Bonus: Reservation system
-
-
 ## Where does the data come from ?
 
 MovieSearch is based on a huge dataset, which is the Gaumont-Pathé API. Gaumont-Pathé is the biggest french movie theater company and so has recorded tons of data since its creation. All of the existing movies are available through this API. By requesting this API, we are able to get all the information we need, in order to fulfill your desires in terms of movies.
@@ -61,7 +45,7 @@ Once the bot is connected, challenge him up !
 
 
 ## What can MovieSearch do ? 
-### MovieSearch can give you information about movies:
+### 1. MovieSearch can give you information about movies:
 
 - **Main information about a specific movie** (example: Uncharted)
 ```
@@ -84,7 +68,7 @@ New movies
 Action movies
 ```
 
-### MovieSearch can give you movies that are available near you:
+### 2. MovieSearch can give you movies that are available near you:
 
 - **Available movies on a specific date in a given city** (example: Angers)
 ```
@@ -108,7 +92,7 @@ Screenings of Uncharted tomorrow in Paris
 Screenings of Uncharted in 4 days in Paris
 ```
 
-### MovieSearch can give you screenings that are available in your favorite movie theater:
+### 3. MovieSearch can give you screenings that are available in your favorite movie theater:
 
 - **All screenings on a specific date in your favorite movie theater** (example: Gaumont Alesia)
 ```
@@ -147,21 +131,4 @@ If the user is looking for all the screening available near him, he will probabl
 
 If the user is looking for trendings movies, he will probably be in the use case 6.
 >   6) Trends movies &rarr; Use case 1
-
-                                    
-
-## Resources
-
-- Discord bot in Python: https://www.youtube.com/watch?v=SLd4d5EqbiM
-- Gaumont API: 
-<br>Showtimes of a movie in a specific movie theater: https://www.cinemaspathegaumont.com/api/show/uncharted/showtimes/cinema-pathe-dammarie
-<br> Showtimes of a movie in a specific movie theater and date: https://www.cinemaspathegaumont.com/api/show/les-vedettes/showtimes/cinema-pathe-dammarie/2022-02-14
-<br>All movie theaters: https://www.cinemaspathegaumont.com/api/cinemas
-<br>Info on a specific movie: https://www.cinemaspathegaumont.com/api/show/uncharted
-<br>Cinemas where a specific movie is shown: https://www.cinemaspathegaumont.com/api/show/uncharted/cinemas
-<br> films bookable in paris https://www.cinemaspathegaumont.com/api/zone/paris
-<br> nouveauté (mise en exergue par le site) https://www.cinemaspathegaumont.com/api/footer?
-<br> https://www.cinemaspathegaumont.com/api/gpxp/imax
-<br> inutile: https://www.cinemaspathegaumont.com/api/tags?language=frw
-<br> https://www.cinemaspathegaumont.com/api/search/quick?q=batman //full 
 
