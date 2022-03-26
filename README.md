@@ -16,6 +16,13 @@ Based on **real-time data**, you will be able to easily find information you nee
 MovieSearch is based on a huge dataset, which is the Gaumont-Pathé API. Gaumont-Pathé is the biggest french movie theater company and so has recorded tons of data since its creation. All of the existing movies are available through this API. By requesting this API, we are able to get all the information we need, in order to fulfill your desires in terms of movies.
 
 ## How to use MovieSearch ?
+### Connect to the MovieSearch discord server
+
+Use this link to join the server: https://discord.gg/nT39uM9k
+
+<br>You can communicate with the bot in the bot channel. 
+
+
 ### Packages and librairies
 
 Packages to install : discord.py
