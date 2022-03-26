@@ -204,13 +204,20 @@ def FilmsTodayTomorrowByLocation(namedGroups={}):
     shows = getShowsZone(location)
     movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
 
-    # showsInfoDict = {
-    #     movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
-    #     for movieName in movieTitles
-    # }
+    showsInfoDict = {
+        movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
+        for movieName in movieTitles
+    }
+
+    movies = [
+        movieName 
+        for movieName, theater in showsInfoDict.items() 
+        for showTimes in theater.values()
+        if showTimes != []
+    ]
     
     res = f'Movies available {time} ( {formatDate} ) in {location}:\n' 
-    for mov in movieTitles:
+    for mov in movies:
         res += mov + '\n'
 
     return res
@@ -232,15 +239,22 @@ def FilmsDaysByLocation(namedGroups={}):
     shows = getShowsZone(location)
     movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
 
-    # showsInfoDict = {}
-    # if detail == "days":
-    #     showsInfoDict = {
-    #         movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
-    #         for movieName in movieTitles
-    #     }
+    showsInfoDict = {}
+    if detail == "days":
+        showsInfoDict = {
+            movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
+            for movieName in movieTitles
+        }
     
+    movies = [
+        movieName 
+        for movieName, theater in showsInfoDict.items() 
+        for showTimes in theater.values()
+        if showTimes != []
+    ]
+
     res = f'Movies available in {date} {detail} ( {formatDate} ) in {location}:\n' 
-    for mov in movieTitles:
+    for mov in movies:
         res += mov + '\n :'
         
     return res
