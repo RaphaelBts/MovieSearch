@@ -216,6 +216,21 @@ def FilmsTodayTomorrowByLocation(namedGroups={}):
     return res
 
 
+
+    # pour moi 
+
+    # all_shows_zone = getShowsZone(location)
+    # all_shows = getAllShows()
+    # moviesTitles = {mov["slug"]:[mov["title"],mov["genres"]] for mov in all_shows} # 
+    # moviesSlugZone = { mov["slug"]:moviesTitles[mov["slug"]] for mov in all_shows_zone if mov["bookable"]}
+
+    # res = f'Movies available {time} ( {formatDate} ) in {location}:\n' 
+    # for slug, movietitle  in moviesSlugZone.items(): 
+    #     res += '  **'+movietitle+'**  '+ '\n' #pareil
+    # for slug, movieinfos in moviesSlugZone.items(): 
+    #     res += '  **'+str(movieinfos[0])+'**  '+ ' | ' + str(movieinfos[1][0])+   f'https://www.cinemaspathegaumont.com/films/{slug}'+ '\n' #pareil
+    # return res
+
 def FilmsDaysByLocation(namedGroups={}):
     location = (namedGroups.get("location1") if namedGroups.get("location1") is not None else "").rstrip().lower()
     date = (namedGroups.get("date") if namedGroups.get("date") is not None else "")
@@ -250,9 +265,9 @@ def ScreeningsTodayTomorrowCinema(namedGroups={}):
     time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
     theaterName = (namedGroups.get("movie_theater_name1") if namedGroups.get("movie_theater_name1") is not None else "").rstrip().lower()
     # avoid problems
-    if time == "" or theaterName == "":
-        return None
-
+    if time =="" or theaterName =="":
+        return 'You did not specify the time or the theatername'
+    
     if time == "today":
         formatDate = getTimeDate(0, "days")
     elif time == "tomorrow":
