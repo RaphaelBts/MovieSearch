@@ -18,7 +18,7 @@ MovieSearch is based on a huge dataset, which is the Gaumont-Pathé API. Gaumont
 ## How to use MovieSearch ?
 ### Connect to the MovieSearch discord server
 
-Use this link to join the server: https://discord.gg/nT39uM9k
+Use this link to join the server: https://discord.gg/v8Dxvde9TE 
 
 <br>You can communicate with the bot in the bot channel. 
 
