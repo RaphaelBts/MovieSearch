@@ -23,7 +23,7 @@ def Hello(namedGroups={}):
 
 
 def Exit():
-    return ['Exit message','Hope I helped. Do not hesitate to come again I am 24/7 active !']
+    return ['Exit message','Hope I helped. Do not hesitate to come again I am 24/7 online !']
 
 
 def Help():                                                                          # Vrai travail de synthese des commandes du bot + mise en page : RAPH 
@@ -45,10 +45,10 @@ def MovieInfos(namedGroups={}):
     slug = infos['slug']
     link = f'https://www.cinemaspathegaumont.com/films/{slug}'
     poster = infos['posterPath']['lg']
-    titleRequest = '{title} informations'
-    content = f'**Link page**: {link} \n**Title** : {title} \n**Released date** : {released_date}\n**Directed by** : {director}\n**Synopsis** : *{synopsis}*\n**poster** : {poster}\n' # on peut remettre poster stv
+    titleRequest = f'{title} informations'
+    content = f'**Title** : {title} \n**Released date** : {released_date}\n**Directed by** : {director}\n**Synopsis** : *{synopsis}*\n**link** : {link}\n' # on peut remettre poster stv
 
-    return [titleRequest,content]
+    return [titleRequest,content,poster]
 
 #region MovieByType (genre or new movies)
 def MovieByType(namedGroups={}): 
@@ -99,23 +99,28 @@ def NewMovies(new=7):
 
 def MoviesComingSoon():  # 24  6 mois c'est assez 
     all_shows = getAllShows()
+    
     movies = [mov for mov in all_shows if mov["isComingSoon"] and mov['isMovie']]
     moviesOrder = dict() 
     for mov in movies : 
-        moviesOrder[mov["title"]]=mov["releaseAt"][0]
-        moviesOrdered = OrderedDict(sorted(moviesOrder.items(), key = lambda x:datetime.strptime(x[1], "%Y-%m-%d"), reverse=False))
-    moviesListSliced = itertools.islice(moviesOrdered.items(), 0, 50)
+        moviesOrder[mov["title"]]=[mov["releaseAt"][0],mov['slug']]
+        moviesOrdered = OrderedDict(sorted(moviesOrder.items(), key = lambda x:datetime.strptime(x[1][0], "%Y-%m-%d"), reverse=False))
+    moviesListSliced = itertools.islice(moviesOrdered.items(), 0, 35)
     titleRequest = '**Movies coming soon** : \n'
     res=""
     keys=[0]
-    for titles,releaseDate in moviesListSliced:
-        date_datetime = datetime.strptime(releaseDate, "%Y-%m-%d")
+    for titles,infos in moviesListSliced:
+        link = f'https://www.cinemaspathegaumont.com/films/{infos[1]}'
+        date_datetime = datetime.strptime(infos[0], "%Y-%m-%d")
         reformated_date = date_datetime.strftime("%d-%m-%Y")
         keys.append(date_datetime.month)
         if date_datetime.month > keys[-2] :
             res+='\n'
-        res += ''+'*'+reformated_date+'*'+'    '+'**'+titles+'**'+ '\n'
+        res += ''+'*'+reformated_date+'*'+'   '+ hyperlink(titles,link) + '\n'
     return [titleRequest,res]
+
+
+
 
 
 def Events(): #marche pas
@@ -140,15 +145,15 @@ def MoviesByActor(namedGroups={}):  # faudrait une autre fonctio qui utilise SEA
     slug = dict()
     for mov in movies :
         if actor in mov["hubbleCasting"]:
-            moviesTitles[mov["title"]]=mov["releaseAt"][0]
+            moviesTitles[mov["title"]]=[mov["releaseAt"][0],mov['genres']]
             slug[mov["title"]]=mov["slug"]
     if moviesTitles =={}:
         return f"Sorry ! It seems that {actor} isn't part of the hubble casting of any current movies"
     typoMoviesFilms = namedGroups.get("greeting").title() + 's' if namedGroups.get("greeting")[-1]!='s' else  namedGroups.get("greeting").title() ## ATTENTION PAS FORCEMENT UNE BONNE IDEE 
     titleRequest = f'{typoMoviesFilms} available played by **{actor}**  :\n'
     res=""
-    for movietitle, releasedate in moviesTitles.items(): 
-         res += '*'+ str(datetime.strptime(releasedate, "%Y-%m-%d").year) +'*'+'   '+hyperlink(bold(movietitle),f'https://www.cinemaspathegaumont.com/films/{slug[movietitle]}')+'\n' #pareil
+    for movietitle, infos in moviesTitles.items(): 
+         res += '*'+ str(datetime.strptime(infos[0], "%Y-%m-%d").year) +'*'+ '  ' +hyperlink(bold(movietitle),f'https://www.cinemaspathegaumont.com/films/{slug[movietitle]}')+' - '+ infos[1][0]+'\n' #pareil
     return [titleRequest,res]
 
 # #Deprecated..
@@ -169,7 +174,7 @@ def MoviesByDirector(namedGroups={}): #meme modif que movies by actor si " valid
 
     for mov in movies :
         if director in mov["directors"]:
-            moviesTitles[mov["title"]]=mov["releaseAt"][0]
+            moviesTitles[mov["title"]]=[mov["releaseAt"][0],mov['genres']]
             slug[mov["title"]]=mov["slug"]
     if moviesTitles =={}:
         return f"Sorry ! It seems that {director} didn't produce any current movies. Please also check if he is a producer."
@@ -177,8 +182,8 @@ def MoviesByDirector(namedGroups={}): #meme modif que movies by actor si " valid
     titleRequest = f'{typoMoviesFilms} available produced by **{director}**  :\n'
     res=""
 
-    for movietitle, releasedate in moviesTitles.items(): 
-         res += '*'+ str(datetime.strptime(releasedate, "%Y-%m-%d").year) +'*'+'    '+hyperlink(bold(movietitle),f'https://www.cinemaspathegaumont.com/films/{slug[movietitle]}')+'\n' #pareil
+    for movietitle, infos in moviesTitles.items(): 
+         res += '*'+ str(datetime.strptime(infos[0], "%Y-%m-%d").year) +'*'+'    '+hyperlink(bold(movietitle),f'https://www.cinemaspathegaumont.com/films/{slug[movietitle]}')+' - ' + infos[1][0]+'\n' #pareil
     return [titleRequest,res]
 
     # all_shows = getAllShows()
@@ -559,6 +564,7 @@ def AllScreeningsDaysLocation(namedGroups={}):
         }
   
     titleRequest = f'Movie shows available in {date} {detail} ( {formatDate} ) in {location}:\n' 
+    res=''
     for mov in list(showsInfoDict.keys()):
         for theater,screenings in list(showsInfoDict[mov].items()):
             if screenings == [] or screenings =='':
@@ -602,7 +608,8 @@ def AllScreeningsTodayTomorrowLocation(namedGroups={}):
         movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
         for movieName in movieSlug
     }
-    test = f'**Screenings available {time} ({formatDate}) in {location}:**\n' 
+    test = f'**Screenings available {time} ({formatDate}) in {location}:**\n'
+    res="" 
   
     titleRequest= f'Screenings available {time} ( {formatDate} ) in {location}:\n' 
     for mov in list(showsInfoDict.keys()):
@@ -611,7 +618,7 @@ def AllScreeningsTodayTomorrowLocation(namedGroups={}):
                showsInfoDict[mov].pop(theater)
         if showsInfoDict[mov]=={} or showsInfoDict[mov]==None : 
             showsInfoDict.pop(mov)
-
+   
     for mov in showsInfoDict.keys():
         res +='\n' +'> '+ bold(moviesTitles[mov][0]) + ' - '+ str(moviesTitles[mov][1][0]) + '\n'
         for theater in showsInfoDict[mov].keys():
@@ -778,16 +785,19 @@ def MovieScreeningsDaysLocation(namedGroups={}):
 
 
 # Get the most liked movies actually on screen
-def GetTrend(namedGroups={}, trending_index=15):
+def GetTrend(namedGroups={}, trending_index=5):
     check = (namedGroups.get("trend") if namedGroups.get("trend") is not None else "")
     # avoid problems
     if check == "":
         return ['Error trend',' I didnt find anythings ! ']
 
     all_movies = getAllShows()
+    
     list_likes = []
+    link=[]
 
     for m in all_movies:
+        link.append(m["slug"])
         m_infos = getMovieInfos(m["slug"])
         like_score = m_infos["feelings"]["countEmotionLike"] + 2*m_infos["feelings"]["countEmotionLove"] - m_infos["feelings"]["countEmotionDisappointed"]
         if(m_infos["next24ShowtimesCount"] != 0):
@@ -797,7 +807,9 @@ def GetTrend(namedGroups={}, trending_index=15):
     trending = list_likes[:trending_index]
 
     titleRequest = f'Current trending movies are :\n'
-    res += '\n'.join(trending[i][1] + '\t' + 'with a like score of ' + str(trending[i][0]) for i in range(len(trending)))
+    for i in range(len(trending)):
+        res = ""
+        res += '\n' + hyperlink(bold(trending[i][1]),link[i]) + '\t' + ' *Likes* ' + str(trending[i][0])
     return [titleRequest,res]
 
 
@@ -862,7 +874,7 @@ def ListGenres():
     str =''
     for i in range(int(len(genres)/5+1)):
         str+='  |  '.join(genres[i*5:(i+1)*5])+ "\n"  
-    return [titleRequest,'[like so.](https://example.com)']
+    return [titleRequest,str]
 
 
     # shows = getAllShows()

@@ -28,8 +28,13 @@ async def on_message(message):
     content = botResponse(message.content)
     response = content[1]
     embed2 = discord.Embed(title= content[0], description=response, color=discord.Color.blue())
+    if len(content)>=3: 
+        urlpreview = content[2]
+        print(urlpreview)
+        embed2.set_image(url=urlpreview)
 
-    response = response[:5000]
+    response = response[:3000]
+    print(response)
     chunks = getChunks(response)
     for chunk in chunks:
         print(len(chunk))
