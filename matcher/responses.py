@@ -64,7 +64,7 @@ def MovieByType(namedGroups={}):
         'Horreur / Epouvante', 'Policier / Espionnage', 'Romance', 'Science Fiction', 'Thriller',  'Western'
     ]
     genresList = [genre.lower() for genre in genresList]
-
+    print (movieType in genresList)
     if movieType in genresList:
         res = MoviebyGenre(movieType.rstrip())
     else:
@@ -75,15 +75,16 @@ def MovieByType(namedGroups={}):
 def MoviebyGenre(genre):
     all_shows = getAllShows()
 
-    movies = [mov for mov in all_shows if genre in mov["genres"]]
-    movieTitles = [[mov["title"],mov['slug']]for mov in movies]
+    movies = [mov for mov in all_shows if genre in str(mov["genres"]).lower()]
+    movieTitles = [[mov["title"],'https://www.cinemaspathegaumont.com/films/'+mov['slug']] for mov in movies]
     
-    titleRequest = "List of movies by genre"
-    res = 'Movies by genre ' + genre + ':\n'
+    titleRequest = f"List of {genre} movies :\n "
+    res = ''
+    print(movieTitles)
     for elem in movieTitles : 
-         content = res + '\n'+ hyperlink(elem[0],elem[1])
-    
-    return [titleRequest, content]
+         res += '\n'+ hyperlink(elem[0],elem[1])
+    print(res)
+    return [titleRequest, res]
 
 def NewMovies(new=7):
     all_shows = getAllShows()
@@ -119,7 +120,7 @@ def MoviesComingSoon():  # 24  6 mois c'est assez
         keys.append(date_datetime.month)
         if date_datetime.month > keys[-2] :
             res+='\n'
-        res += ''+'*'+reformated_date+'*'+'   '+ hyperlink(titles,link) + '\n'
+        res += ''+'*'+reformated_date+'*'+'    '+ hyperlink(titles,link) + '\n'
     return [titleRequest,res]
 
 
