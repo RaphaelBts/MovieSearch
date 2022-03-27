@@ -19,7 +19,7 @@ def Hello(namedGroups={}):
     if greeting == "":
         return None
 
-    return ['Hi Summoner !',f'{greeting} you !']
+    return [f'{greeting} you !', 'Feel free to ask about a specific movie infos, movies screenings in a particular theater or location, famous actor or director and so on']
 
 
 def Exit():

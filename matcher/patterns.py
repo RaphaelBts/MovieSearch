@@ -3,12 +3,12 @@ patternList = [
     {
         'pattern' : '\\b(?P<greeting>[H-h]i|[H-h]ello|[H-h]ey|[G-g]ood morning|[G-g]ood afternoon)\\b',
         'intent' : 'Hello'
-        # done + tested
+        # done + tested + ver
     }, 
     {
         'pattern' :'\\b(bye|exit|finish|end|stop)\\b',
         'intent' : 'Exit'
-        # done + tested : changer le messagee c'est tout
+        # done + tested + over
     },
     {
         'pattern' : '\\b([H-h]elp(s)?|Aide(s)?|Command(s)?)\\b',
