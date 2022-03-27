@@ -51,10 +51,10 @@ Action movies
 
 - **Available movies on a specific date in a given city** (example: Angers)
 ```
-Available movies tomorrow in Angers
+Movies available tomorrow in Angers
 ```
 ```
-Available movies in 4 days in Angers
+Movies available in 4 days in Angers
 ```
 - **All screenings on a specific date in a given city** (example: Lyon)
 ```
@@ -82,10 +82,10 @@ Screenings in 4 days in Gaumont Alesia
 ```
 - **All screenings of a certain movie on a specific date in your favorite movie theater** (example: movie Uncharted in Pathe Boulogne)
 ```
-Screenings of Uncharted tomorrow in Pathe Boulogne
+Screenings of The Batman tomorrow in Pathé Boulogne
 ```
 ```
-Screenings of Uncharted in 4 days in Pathe Boulogne
+Screenings of The Batman in 4 days in Pathé Boulogne
 ```
 
 ### 4. MovieSearch can recommand you movies:
