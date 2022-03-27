@@ -854,7 +854,7 @@ def GetRecommendation(movieName, theaterName=""):
     similarity_list.sort()
     
     res = f'Since {movie_info["title"]} is not available, here are some similar movies you may like :\n'
-    res += '\n'.join(similarity_list[i][1] + '\t' + 'similarity scoring' + str(round(similarity_list[i][0],2)) for i in range(10))
+    res += '\n'.join(bold(similarity_list[i][1]) + '\t' + 'similarity scoring  ' + str(round(similarity_list[i][0],2)) for i in range(10))
     return res
 
 
