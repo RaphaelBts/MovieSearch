@@ -52,7 +52,7 @@ def MovieInfos(namedGroups={}):
 
 #region MovieByType (genre or new movies)
 def MovieByType(namedGroups={}): 
-    movieType = (namedGroups.get("type") if namedGroups.get("type") is not None else "").rstrip()
+    movieType = (namedGroups.get("type") if namedGroups.get("type") is not None else "").rstrip().lower()
     # avoid problems
     if movieType == "":
         return None
@@ -63,6 +63,7 @@ def MovieByType(namedGroups={}):
         'Drame psychologique', 'Famille', 'Fantastique', 'Film musical', 'Guerre', 'Historique',
         'Horreur / Epouvante', 'Policier / Espionnage', 'Romance', 'Science Fiction', 'Thriller',  'Western'
     ]
+    genresList = [genre.lower() for genre in genresList]
 
     if movieType in genresList:
         res = MoviebyGenre(movieType.rstrip())
