@@ -24,12 +24,12 @@ patternList = [
     {
         'pattern':'.*(?P<greeting>[F-f]ilm(s)?|[M-m]ovie(s)?)\\s(with|play by|played by)\\s?(the\\sactor)?\\s(Mr|Mrs)?(\\.)?(?P<actor>.*)',
         'intent': 'Movie by actor'
-        # done + tested + quasi forme++  si temps rajouter photo + genre 
+        # over
     },
     {
         'pattern':'.*(?P<greeting>[F-f]ilm(s)?|[M-m]ovie(s)?)\\s(directed by|directed|by)\\s?(the\\sdirector)?\\s(Mr|Mrs)?(\\.)?(?P<director>.*)',
         'intent': 'Movie by director'
-        # done + tested + quasi forme++  Si temps rajouter photos + genre 
+        # over
  
     },
     
@@ -37,32 +37,32 @@ patternList = [
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\sscreen)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(in\\s*)?(?P<location1>\\w+(\\s\\w+)*)',
         'intent': 'Available films in ... days by location' # authorized date : in x days (maximum 14 days) # il faut inverser date et location (pr que ca soit conforme à tous les autres)
-    },   # done + tested + FORME A REVOIR
+    },   # over
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\s*screen)\\s(?P<time>now|today|currently|tomorrow)\\s*(at\\s*|in\\s*)?(?P<location2>\\w+(\\s\\w+)*)',
         'intent': 'Available films today/tomorrow by location' # location = city   
-        # done + tested + FORME A REVOIR  =  #changer pour HYPERLINK (j'ai tricher pcq today/tomorrow c pareil ca fait chié apres l'algo est trop lour si on abuse h24 des seances)
+        # over
     },
     {
         'pattern':'.*([F-f]ilm(s)?|[M-m]ovie(s)?)\\s*(available|on\\s*screen)\\s*(at\\s*|in\\s*)?(?P<location2>\\w+(\\s\\w+)*)',
         'intent': 'Available films today/tomorrow by location' # location = city  # l'utilisateur peut niquer le bot en rajoutant tomorrow et d'autres champs apres le lieu...=>trigger ce pattern
-        # done + tested + FORME A REVOIR = > 
+        # over
     },
     ### Zone movie theater ##########################################################################################################
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name1>[P-p]athé.*|[G-g]aumont.*)',
         'intent': 'All movie screening today/tomorrow in cinema ...' # date : today or tomorrow 
-        # done + tested + PROBLEME DE PRINT SUR PLUSIEURS MESSAGES (pas raph qui ai écrit ca) + FORM 
+        # over
     },
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name2>[P-p]athé.*|[G-g]aumont.*)',
         'intent': 'All movie screening in ... days in cinema ...' # authorized date : in x days (maximum 14 days)
-        # done + tested + FORM
+        # over
     },
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*((of|for)(\\s)?(the\\s*film|the\\s*movie)?)\\s*(?P<moviename2>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name3>[P-p]athé.*|[G-g]aumont.*)',
         'intent': 'Movie screening for movie ... today/tomorrow in cinema ...' # date : today or tomorrow only
-        # done + tested + FORM
+        # over
     },
     {
         'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*((of|for)(\\s)?(the\\s*film|the\\s*movie)?)\\s*(?P<moviename3>.*)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name4>[P-p]athé.*|[G-g]aumont.*)',

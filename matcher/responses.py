@@ -120,7 +120,7 @@ def MoviesComingSoon():  # 24  6 mois c'est assez
         keys.append(date_datetime.month)
         if date_datetime.month > keys[-2] :
             res+='\n'
-        res += ''+'*'+reformated_date+'*'+'    '+ hyperlink(titles,link) + '\n'
+        res += ''+'*'+reformated_date+'*  ' + hyperlink(titles,link) + '\n'
     return [titleRequest,res]
 
 
@@ -801,18 +801,18 @@ def GetTrend(namedGroups={}, trending_index=5):
     link=[]
 
     for m in all_movies:
-        link.append(m["slug"])
+        
         m_infos = getMovieInfos(m["slug"])
         like_score = m_infos["feelings"]["countEmotionLike"] + 2*m_infos["feelings"]["countEmotionLove"] - m_infos["feelings"]["countEmotionDisappointed"]
         if(m_infos["next24ShowtimesCount"] != 0):
             list_likes.append([like_score, m["title"]])
+            link.append('https://www.cinemaspathegaumont.com/films/'+m["slug"])
 
     list_likes.sort(reverse=True)
     trending = list_likes[:trending_index]
-
     titleRequest = f'Current trending movies are :\n'
+    res = ""
     for i in range(len(trending)):
-        res = ""
         res += '\n' + hyperlink(bold(trending[i][1]),link[i]) + '\t' + ' *Likes* ' + str(trending[i][0])
     return [titleRequest,res]
 
