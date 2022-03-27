@@ -24,21 +24,25 @@ async def on_message(message):
     # avoid self response
     if message.author == client.user:
         return
-        
-    response = botResponse(message.content)
+
+    content = botResponse(message.content)
+    response = content[1]
+    embed2 = discord.Embed(title= content[0], description=response, color=discord.Color.blue())
 
     response = response[:5000]
     chunks = getChunks(response)
     for chunk in chunks:
         print(len(chunk))
         print(chunk)
-        await message.channel.send(chunk)
+        embed3 = discord.Embed( description=chunk, color=discord.Color.blue())
+        await message.channel.send(embed=embed3)
         time.sleep(2)
-    
-    await message.channel.send(response)
+  
+    #await message.channel.send(response)
+    await message.channel.send(embed=embed2)
     print(f'\033[92m<{len(response)}> characters has been send to Discord!\033[0m')
 
-def getChunks(text, chunksize=2000):
+def getChunks(text, chunksize=6000):
     chunks = []
     block = []
     line = []

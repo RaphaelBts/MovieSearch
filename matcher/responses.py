@@ -10,7 +10,7 @@ import numpy as np
 
 
 def Default():
-    return 'I did not get your intent. Please try again.'
+    return ['Default message','I did not get your intent. Please try again.']
 
 
 def Hello(namedGroups={}):
@@ -19,11 +19,11 @@ def Hello(namedGroups={}):
     if greeting == "":
         return None
 
-    return f'{greeting} you !'
+    return ['Hi Summoner !',f'{greeting} you !']
 
 
 def Exit():
-    return 'Hope I helped. Do not hesitate to come seeing me again !'
+    return ['Exit message','Hope I helped. Do not hesitate to come again I am 24/7 active !']
 
 
 def Help():                                                                          # Vrai travail de synthese des commandes du bot + mise en page : RAPH 
@@ -45,9 +45,10 @@ def MovieInfos(namedGroups={}):
     slug = infos['slug']
     link = f'https://www.cinemaspathegaumont.com/films/{slug}'
     poster = infos['posterPath']['lg']
+    titleRequest = '{title} informations'
+    content = f'**Link page**: {link} \n**Title** : {title} \n**Released date** : {released_date}\n**Directed by** : {director}\n**Synopsis** : *{synopsis}*\n**poster** : {poster}\n' # on peut remettre poster stv
 
-    return f'**Link page**: {link} \n**Title** : {title} \n**Released date** : {released_date}\n**Directed by** : {director}\n**Synopsis** : *{synopsis}*\n\n' # on peut remettre poster stv
-
+    return [titleRequest,content]
 
 #region MovieByType (genre or new movies)
 def MovieByType(namedGroups={}): 
@@ -75,9 +76,11 @@ def MoviebyGenre(genre):
 
     movies = [mov for mov in all_shows if genre in mov["genres"]]
     movieTitles = [mov["title"] for mov in movies]
-
+    
+    titleRequest = "List of movies by genre"
     res = 'Movies by genre ' + genre + ':\n'
-    return res + '\n'.join(movieTitles)
+    content = res + '\n'.join(movieTitles) 
+    return [titleRequest, content]
 
 def NewMovies(new=7):
     all_shows = getAllShows()
@@ -88,8 +91,9 @@ def NewMovies(new=7):
     movies = [mov for mov in all_shows if mov["isNew"]]
     movieTitles = [mov["title"] for mov in movies]
     
-    res = 'New movies (released less than ' + str(new) + ' days ago):\n\n' 
-    return res + '\n'.join(movieTitles)
+    titleRequest = 'New movies (released less than ' + str(new) + ' days ago):\n\n' 
+    content = '\n'.join(movieTitles)
+    return [titleRequest,content]
 #endregion
 
 
@@ -101,7 +105,8 @@ def MoviesComingSoon():  # 24  6 mois c'est assez
         moviesOrder[mov["title"]]=mov["releaseAt"][0]
         moviesOrdered = OrderedDict(sorted(moviesOrder.items(), key = lambda x:datetime.strptime(x[1], "%Y-%m-%d"), reverse=False))
     moviesListSliced = itertools.islice(moviesOrdered.items(), 0, 50)
-    res = '**Movies coming soon** : \n'
+    titleRequest = '**Movies coming soon** : \n'
+    res=""
     keys=[0]
     for titles,releaseDate in moviesListSliced:
         date_datetime = datetime.strptime(releaseDate, "%Y-%m-%d")
@@ -110,7 +115,7 @@ def MoviesComingSoon():  # 24  6 mois c'est assez
         if date_datetime.month > keys[-2] :
             res+='\n'
         res += ''+'*'+reformated_date+'*'+'    '+'**'+titles+'**'+ '\n'
-    return res
+    return [titleRequest,res]
 
 
 def Events(): #marche pas
@@ -118,8 +123,9 @@ def Events(): #marche pas
     movies = [mov for mov in all_shows if mov["isEventSpecial"]]
     movieTitles = [mov["title"] for mov in movies]
     
-    res = 'Special events :\n' 
-    return res + '\n'.join(movieTitles)
+    titleRequest = 'Special events :\n' 
+    content = '\n'.join(movieTitles)
+    return [titleRequest,content]
 
 
 def MoviesByActor(namedGroups={}):  # faudrait une autre fonctio qui utilise SEARCH : pcq la c'est que les currently available...
@@ -139,11 +145,11 @@ def MoviesByActor(namedGroups={}):  # faudrait une autre fonctio qui utilise SEA
     if moviesTitles =={}:
         return f"Sorry ! It seems that {actor} isn't part of the hubble casting of any current movies"
     typoMoviesFilms = namedGroups.get("greeting").title() + 's' if namedGroups.get("greeting")[-1]!='s' else  namedGroups.get("greeting").title() ## ATTENTION PAS FORCEMENT UNE BONNE IDEE 
-    res = f'{typoMoviesFilms} available played by **{actor}**  :\n\n'
-
+    titleRequest = f'{typoMoviesFilms} available played by **{actor}**  :\n'
+    res=""
     for movietitle, releasedate in moviesTitles.items(): 
-         res += '*'+ str(datetime.strptime(releasedate, "%Y-%m-%d").year) +'*'+'   '+'**'+movietitle+'**  '+ f'https://www.cinemaspathegaumont.com/films/{slug[movietitle]}'+'\n' #pareil
-    return res
+         res += '*'+ str(datetime.strptime(releasedate, "%Y-%m-%d").year) +'*'+'   '+hyperlink(bold(movietitle),f'https://www.cinemaspathegaumont.com/films/{slug[movietitle]}')+'\n' #pareil
+    return [titleRequest,res]
 
 # #Deprecated..
 # def titleUrl(movietitle): # A perfectionner il etait une fois ... pas pris en compte des ... peut etre des guillemets aussi.. 
@@ -168,11 +174,12 @@ def MoviesByDirector(namedGroups={}): #meme modif que movies by actor si " valid
     if moviesTitles =={}:
         return f"Sorry ! It seems that {director} didn't produce any current movies. Please also check if he is a producer."
     typoMoviesFilms = namedGroups.get("greeting").title() + 's' if namedGroups.get("greeting")[-1]!='s' else  namedGroups.get("greeting").title() ## ATTENTION PAS FORCEMENT UNE BONNE IDEE 
-    res = f'{typoMoviesFilms} available produced by **{director}**  :\n\n'
+    titleRequest = f'{typoMoviesFilms} available produced by **{director}**  :\n'
+    res=""
 
     for movietitle, releasedate in moviesTitles.items(): 
-         res += '*'+ str(datetime.strptime(releasedate, "%Y-%m-%d").year) +'*'+'    '+'**'+movietitle+'**  '+ f'https://www.cinemaspathegaumont.com/films/{slug[movietitle]}'+'\n' #pareil
-    return res
+         res += '*'+ str(datetime.strptime(releasedate, "%Y-%m-%d").year) +'*'+'    '+hyperlink(bold(movietitle),f'https://www.cinemaspathegaumont.com/films/{slug[movietitle]}')+'\n' #pareil
+    return [titleRequest,res]
 
     # all_shows = getAllShows()
     # movies = [x for x in all_shows if x["directors"] is not None]
@@ -201,42 +208,21 @@ def FilmsTodayTomorrowByLocation(namedGroups={}):
     else:
         return ""
 
-    shows = getShowsZone(location)
-    movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
+    all_shows_zone = getShowsZone(location)
+    all_shows = getAllShows()
 
-    showsInfoDict = {
-        movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
-        for movieName in movieTitles
-    }
+    moviesTitles = {mov["slug"]:[mov["title"],mov["genres"]] for mov in all_shows} # 
+    moviesSlugZone = { mov["slug"]:moviesTitles[mov["slug"]] for mov in all_shows_zone if mov["bookable"]}
 
-    movies = [
-        movieName 
-        for movieName, theater in showsInfoDict.items() 
-        for showTimes in theater.values()
-        if showTimes != []
-    ]
-    
-    res = f'Movies available {time} ( {formatDate} ) in {location}:\n' 
-    for mov in movies:
-        res += mov + '\n'
-
-    return res
+    titleRequest = f'Movies available {time} ({formatDate}) in {location}:\n' 
+    res=""
+    for slug, movieinfos in moviesSlugZone.items(): 
+        res += '  **'+str(movieinfos[0])+'**  '+ ' | ' + str(movieinfos[1][0])+   f'https://www.cinemaspathegaumont.com/films/{slug}'+ '\n' #pareil
+     #changer pour HYPERLINK
+    return [titleRequest,res]
 
 
 
-    # pour moi 
-
-    # all_shows_zone = getShowsZone(location)
-    # all_shows = getAllShows()
-    # moviesTitles = {mov["slug"]:[mov["title"],mov["genres"]] for mov in all_shows} # 
-    # moviesSlugZone = { mov["slug"]:moviesTitles[mov["slug"]] for mov in all_shows_zone if mov["bookable"]}
-
-    # res = f'Movies available {time} ( {formatDate} ) in {location}:\n' 
-    # for slug, movietitle  in moviesSlugZone.items(): 
-    #     res += '  **'+movietitle+'**  '+ '\n' #pareil
-    # for slug, movieinfos in moviesSlugZone.items(): 
-    #     res += '  **'+str(movieinfos[0])+'**  '+ ' | ' + str(movieinfos[1][0])+   f'https://www.cinemaspathegaumont.com/films/{slug}'+ '\n' #pareil
-    # return res
 
 def FilmsDaysByLocation(namedGroups={}):
     location = (namedGroups.get("location1") if namedGroups.get("location1") is not None else "").rstrip().lower()
@@ -251,14 +237,17 @@ def FilmsDaysByLocation(namedGroups={}):
     else:
         formatDate = getTimeDate(int(date), detail)
 
-    shows = getShowsZone(location)
-    movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
+    all_shows_zone = getShowsZone(location)
+    all_shows = getAllShows()
+
+    movieSlugs= [mov["slug"] for mov in all_shows_zone if mov["bookable"]]
+    movieInfos = {mov["slug"]:[mov["title"],mov["genres"]] for mov in all_shows} # 
 
     showsInfoDict = {}
     if detail == "days":
         showsInfoDict = {
             movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
-            for movieName in movieTitles
+            for movieName in movieSlugs
         }
     
     movies = [
@@ -268,11 +257,12 @@ def FilmsDaysByLocation(namedGroups={}):
         if showTimes != []
     ]
 
-    res = f'Movies available in {date} {detail} ( {formatDate} ) in {location}:\n' 
-    for mov in movies:
-        res += mov + '\n :'
+    titleRequest = f'Movies available in {date} {detail} ( {formatDate} ) in {location}:\n' 
+    res=""
+    for slug in movies:
+         res += '  **'+str(movieInfos[0])+'**  '+ ' | ' + hyperlink(str(movieInfos[1][0]),f'https://www.cinemaspathegaumont.com/films/{slug}')+ '\n' #pareil
         
-    return res
+    return [titleRequest,res]
 
 
 def ScreeningsTodayTomorrowCinema(namedGroups={}):
@@ -290,18 +280,47 @@ def ScreeningsTodayTomorrowCinema(namedGroups={}):
         return ""
     theater = 'cinema-' + theaterName.replace('é', 'e').replace(' ', '-')
     shows = getMovieTheaterShows(theater)
+    all_shows = getAllShows()
+    moviesTitles = {mov["slug"]:[mov["title"],mov["genres"]] for mov in all_shows} # 
+    
 
     showTimes = {
-        slug : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]]for res in getMovieShowtimes(slug, theater, date=formatDate)]
+        slug : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").strftime('%H:%M')), res["version"], res["refCmd"]]for res in getMovieShowtimes(slug, theater, date=formatDate)]
         for slug, infos in shows.items()
         if infos["bookable"]
     }
 
-    filterShowTimes = { k:v for k,v in showTimes.items() if v != []}
 
-    res = f'Screenings available for {time} ( {formatDate} ) in {theaterName}:\n'
-    res += '\n\n'.join([movieName + '\n' + '\n'.join(['\t'.join(screen) for screen in showTimes[movieName]]) for movieName in filterShowTimes.keys()])
-    return res
+    titleRequest = f'All Screenings available {time} ({formatDate}) in {theater}:\n'
+    res = ""
+    for slug,screenings in list(showTimes.items()):
+        if screenings ==[]:
+            showTimes.pop(slug)
+
+    for slug in showTimes.keys(): 
+        res += '\n'+ bold(moviesTitles[slug][0]) + ' - '+ str(moviesTitles[slug][1][0]) + '\n'
+        vost = []
+        vf = []
+
+        for screen in showTimes[slug] : 
+            if screen[1]=='vost':
+                vost.append([screen[0],screen[2]])
+
+            if screen[1]=="vf"  : 
+                vf.append([screen[0],screen[2]])
+
+        if len(vf) >=  1 : 
+            res += 'VF'
+            for v in vf : 
+                res += ' | '+ hyperlink(v[0],v[1])
+            res +='\n'
+        if len(vost) >= 1 : 
+            res +='VOST'
+            for vst in vost : 
+                res += ' | '+ hyperlink(vst[0],vst[1])
+            res +='\n'
+    return [titleRequest,res]
+
 
 
 def ScreeningsDaysCinema(namedGroups={}):
@@ -319,19 +338,68 @@ def ScreeningsDaysCinema(namedGroups={}):
 
     theater = 'cinema-' + theaterName.replace('é', 'e').replace(' ', '-')
     shows = getMovieTheaterShows(theater)
+    all_shows = getAllShows()
+    moviesTitles = {mov["slug"]:[mov["title"],mov["genres"]] for mov in all_shows} # 
+    
 
     showTimes = {
-        slug : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]]for res in getMovieShowtimes(slug, theater, date=formatDate)]
+        slug : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").strftime('%H:%M')), res["version"], res["refCmd"]]for res in getMovieShowtimes(slug, theater, date=formatDate)]
         for slug, infos in shows.items()
         if infos["bookable"]
     }
 
-    filterShowTimes = { k:v for k,v in showTimes.items() if v != []}
 
-    res = f'Screenings available in in {date} {detail} ( {formatDate} ) in {theaterName}:\n'
-    res += '\n\n'.join([movieName + '\n' + '\n'.join(['\t'.join(screen) for screen in showTimes[movieName]]) for movieName in filterShowTimes.keys()])
-    return res
+    titleRequest = f'All Screenings available  in {date} days ({formatDate}) in {theater}:\n'
+    res = ""
+    for slug,screenings in list(showTimes.items()):
+        if screenings ==[]:
+            showTimes.pop(slug)
 
+    for slug in showTimes.keys(): 
+        res += '\n'+ bold(moviesTitles[slug][0]) + ' - '+ str(moviesTitles[slug][1][0]) + '\n'
+        vost = []
+        vf = []
+
+        for screen in showTimes[slug] : 
+            if screen[1]=='vost':
+                vost.append([screen[0],screen[2]])
+
+            if screen[1]=="vf"  : 
+                vf.append([screen[0],screen[2]])
+
+        if len(vf) >=  1 : 
+            res += 'VF'
+            for v in vf : 
+                res += ' | '+ hyperlink(v[0],v[1])
+            res +='\n'
+        if len(vost) >= 1 : 
+            res +='VOST'
+            for vst in vost : 
+                res += ' | '+ hyperlink(vst[0],vst[1])
+            res +='\n'
+    return [titleRequest,res]
+
+
+
+          # all_shows_zone = getShowsZone(location)
+    # all_shows = getAllShows()
+    # moviesTitles = {mov["slug"]:[mov["title"],mov["genres"]] for mov in all_shows} # 
+    # moviesSlugZone = { mov["slug"]:moviesTitles[mov["slug"]] for mov in all_shows_zone if mov["bookable"]}
+
+    # res = f'Movies available {time} ( {formatDate} ) in {location}:\n' 
+    # for slug, movietitle  in moviesSlugZone.items(): 
+    #     res += '  **'+movietitle+'**  '+ '\n' #pareil
+    # for slug, movieinfos in moviesSlugZone.items(): 
+    #     res += '  **'+str(movieinfos[0])+'**  '+ ' | ' + str(movieinfos[1][0])+   f'https://www.cinemaspathegaumont.com/films/{slug}'+ '\n' #pareil
+    # return res
+
+    for mov in showsInfoDict.keys():
+        res +='\n' +'> '+ bold(moviesTitles[mov][0]) + ' - '+ str(moviesTitles[mov][1][0]) + '\n'
+        for theater in showsInfoDict[mov].keys():
+            res += theater.replace('cinema','').replace('-',' ') +  '   ' + '  |  '.join(list(map(lambda x: str(datetime.strptime(x["time"], "%Y-%m-%d %H:%M:%S").strftime('%H:%M')), showsInfoDict[mov][theater])))  + '\n'
+            #tmp = '  |  '.join(list(map(lambda x: str(datetime.strptime(x["time"], "%Y-%m-%d %H:%M:%S").strftime('%H:%M')), showsInfoDict[mov][theater])))
+            #test += f"{bold(moviesTitles[mov][0])  : <10}{theater.replace('cinema','').replace('-',' ')} { tmp : >100}\n"
+            # print(f"Unpacked list: {*a,}")
 
 def MovieScreeningsTodayTomorrowCinema(namedGroups={}):
     movieName = (namedGroups.get("moviename2") if namedGroups.get("moviename2") is not None else "").rstrip()
@@ -339,7 +407,7 @@ def MovieScreeningsTodayTomorrowCinema(namedGroups={}):
     theaterName = (namedGroups.get("movie_theater_name3") if namedGroups.get("movie_theater_name3") is not None else "").rstrip().lower()
     # avoid problems
     if movieName == "" or time == "" or theaterName == "":
-        return None
+        return None # à modifier avec le bon format..
 
     infos = getMovieInfos(apiSearch(movieName))
     if type(infos) == dict and "slug" in infos.keys():
@@ -351,21 +419,51 @@ def MovieScreeningsTodayTomorrowCinema(namedGroups={}):
     elif time == "tomorrow":
         formatDate = getTimeDate(1, "days")
     else:
-        return ""
+        return "" # à modifier avec le bon format 
     theater = 'cinema-' + theaterName.replace('é', 'e').replace(' ', '-')
 
-    showTimes = [
-        [str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]]
-        for res in getMovieShowtimes(slug, theater, date=formatDate)
-        if res["status"] == "available"
-    ]
+    showTimes = {
+        theater : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").strftime('%Y-%m-%d %H:%M:')), res["version"], res["refCmd"]] for res in getMovieShowtimes(slug, theater, date=formatDate)] 
+    
+    }
 
-    if showTimes == []:
-        return GetRecommendation(slug, theaterName)
+    hasShowTimes = False
+    for k, v in list(showTimes.items()):
+        if v != []:
+            hasShowTimes = True
+            pass
+
+    res =''
+    if hasShowTimes:
+        titleRequest = f'Screenings available for {movieName} in {time}  ({formatDate}) in {theater}:\n'
+        
+        res += '\n'+ cinemaOut(theater) +'\n'
+        for theater in showTimes.keys(): 
+            vost = []
+            vf = []
+    
+            for screen in showTimes[theater] : 
+                if screen[1]=='vost':
+                    vost.append([screen[0],screen[2]])
+
+                if screen[1]=="vf"  : 
+                    vf.append([screen[0],screen[2]])
+
+            if len(vf) >=  1 : 
+                res += 'VF'
+                for v in vf : 
+                    res +=  '  '+ '['+v[0]+']' +'('+v[1] +')'
+                res +='\n'
+            if len(vost) >= 1 : 
+                res +='VOST'
+                for vst in vost : 
+                    res += '  '+'['+vst[0]+']' +'('+vst[1] +')'
+                res +='\n'
+            return [titleRequest,res]
+        
     else:
-        res = f'Screenings available for {movieName} {time} ( {formatDate} ) in {theaterName}:\n'
-        res += '\n'.join(['\t'.join(x) for x in showTimes])
-        return res
+        return ["Recommendations",GetRecommendation(slug, theaterName)]
+
 
 
 def MovieScreeningsDaysCinema(namedGroups={}):
@@ -375,7 +473,7 @@ def MovieScreeningsDaysCinema(namedGroups={}):
     theaterName = (namedGroups.get("movie_theater_name4") if namedGroups.get("movie_theater_name4") is not None else "").rstrip().lower()
     # avoid problems
     if movieName == "" or detail == "" or theaterName == "":
-        return None
+        return ['Error Screenings for a specific cinema','Oups ! Please check the cinema name, the date or the movie name ! ']
 
     if date == "":
         formatDate = getTimeDate(0, detail)
@@ -386,19 +484,53 @@ def MovieScreeningsDaysCinema(namedGroups={}):
     if type(infos) == dict and "slug" in infos.keys():
         slug = infos["slug"]
     theater = 'cinema-' + theaterName.replace('é', 'e').replace(' ', '-')
+    res = cinemaOut(theater) +'\n'
+    for i in range(int(date)+1):
+        formatDate = getTimeDate(int(i), detail)
+        showTimes = {
+            theater : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").strftime('%Y-%m-%d %H:%M:')), res["version"], res["refCmd"]] for res in getMovieShowtimes(slug, theater, date=formatDate)] 
+        
+        }
 
-    showTimes = [
-        [str(datetime.strptime(x["time"], "%Y-%m-%d %H:%M:%S").time()), x["version"], x["refCmd"]]
-        for x in getMovieShowtimes(slug, theater, date=formatDate)
-        if x.get("status") == "available"
-    ]
+        # Check if all cinemas does not project this movie
+        hasShowTimes = False
+        for k, v in list(showTimes.items()):
+            if v == []:
+                showTimes.pop(k)
+            if v != []:
+                hasShowTimes = True
+                pass
+        
+        if hasShowTimes:
+            titleRequest = f'Screenings available for {movieName} in {date} days ({formatDate}) in {theater}:\n'
+            
 
-    if showTimes == []:
-        return GetRecommendation(slug, theaterName)
-    else:
-        res = f'Screenings available for {movieName} in {date} {detail} ( {formatDate} ) in {theaterName}:\n'
-        res += '\n'.join(['\t'.join(x) for x in showTimes])
-        return res
+            for theater in showTimes.keys(): 
+                vost = []
+                vf = []
+        
+                for screen in showTimes[theater] : 
+                    if screen[1]=='vost':
+                        vost.append([screen[0],screen[2]])
+    
+                    if screen[1]=="vf"  : 
+                        vf.append([screen[0],screen[2]])
+
+                if len(vf) >=  1 : 
+                    res += 'VF'
+                    for v in vf : 
+                        res +=  '  '+ '['+v[0]+']' +'('+v[1] +')'
+                    res +='\n'
+                if len(vost) >= 1 : 
+                    res +='VOST'
+                    for vst in vost : 
+                        res += '  '+'['+vst[0]+']' +'('+vst[1] +')'
+                    res +='\n'
+        else:
+            res+= GetRecommendation(slug, theaterName)
+    return [titleRequest,res]
+    
+
 
 
 def AllScreeningsDaysLocation(namedGroups={}):
@@ -407,74 +539,115 @@ def AllScreeningsDaysLocation(namedGroups={}):
     detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
     # avoid problems
     if location == "" or detail == "":
-        return None
+        return [ 'Error All screening with specific dates and location', "Please verify the date and location"]
 
     if date == "":
         formatDate = getTimeDate(0, detail)
     else:
         formatDate = getTimeDate(int(date), detail)
+    
+    all_shows_zone = getShowsZone(location)
+    all_shows = getAllShows()
 
-    shows = getShowsZone(location)
-    movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
-
+    movieSlug = [mov["slug"] for mov in all_shows_zone if mov["bookable"]]
+    moviesTitles = {mov["slug"]:[mov["title"],mov["genres"]] for mov in all_shows}
     showsInfoDict = {}
     if detail == "days":
         showsInfoDict = {
             movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
-            for movieName in movieTitles
+            for movieName in movieSlug
         }
-    
-    res = f'Movie shows available in {date} {detail} ( {formatDate} ) in {location}:\n' 
-    for mov in showsInfoDict.keys():
-        res += mov + '\n :'
-        for theater in showsInfoDict[mov].keys():
-            res += '\t--> ' + theater + ' --> '
-            res += ', '.join(list(map(lambda x: str(datetime.strptime(x["time"], "%Y-%m-%d %H:%M:%S").time()), showsInfoDict[mov][theater])))
-            res += '\n'
-        
-    return res
+  
+    titleRequest = f'Movie shows available in {date} {detail} ( {formatDate} ) in {location}:\n' 
+    for mov in list(showsInfoDict.keys()):
+        for theater,screenings in list(showsInfoDict[mov].items()):
+            if screenings == [] or screenings =='':
+               showsInfoDict[mov].pop(theater)
+        if showsInfoDict[mov]=={} or showsInfoDict[mov]==None : 
+            showsInfoDict.pop(mov)
 
+    for mov in showsInfoDict.keys():
+        res +='\n' +'> '+ bold(moviesTitles[mov][0]) + ' - '+ str(moviesTitles[mov][1][0]) + '\n'
+        for theater in showsInfoDict[mov].keys():
+            res += theater.replace('cinema','').replace('-',' ') +  '   ' + '  |  '.join(list(map(lambda x: str(datetime.strptime(x["time"], "%Y-%m-%d %H:%M:%S").strftime('%H:%M')), showsInfoDict[mov][theater])))  + '\n'
+            #tmp = '  |  '.join(list(map(lambda x: str(datetime.strptime(x["time"], "%Y-%m-%d %H:%M:%S").strftime('%H:%M')), showsInfoDict[mov][theater])))
+            #test += f"{bold(moviesTitles[mov][0])  : <10}{theater.replace('cinema','').replace('-',' ')} { tmp : >100}\n"
+            # print(f"Unpacked list: {*a,}")
+            
+    return [titleRequest,res]
+    
+
+  
 
 def AllScreeningsTodayTomorrowLocation(namedGroups={}):
     location = (namedGroups.get("location5") if namedGroups.get("location5") is not None else "").rstrip().lower()
     time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
     # avoid problems
     if location == "" or time == "":
-        return None
+        return ['Error all screenings today/tomorrow with location', ' I am sorry your location name seems to be wrong !']
 
     if time == "today":
         formatDate = getTimeDate(0, "days")
     elif time == "tomorrow":
         formatDate = getTimeDate(1, "days")
     else:
-        return ""
+        return ["Error dateformat All screenings","Something happens with the date format O_o"]
 
-    shows = getShowsZone(location)
-    movieTitles = [mov["slug"] for mov in shows if mov["bookable"]]
+    all_shows_zone = getShowsZone(location)
+    all_shows = getAllShows()
 
+    movieSlug = [mov["slug"] for mov in all_shows_zone if mov["bookable"]]
+    moviesTitles = {mov["slug"]:[mov["title"],mov["genres"]] for mov in all_shows}
     showsInfoDict = {
         movieName : {movieTheater : getMovieShowtimes(movieName, movieTheater, date=formatDate) for movieTheater in CINEMA_DICT[location]}
-        for movieName in movieTitles
+        for movieName in movieSlug
     }
-    
-    res = f'Screenings available {time} ( {formatDate} ) in {location}:\n' 
+    test = f'**Screenings available {time} ({formatDate}) in {location}:**\n' 
+  
+    titleRequest= f'Screenings available {time} ( {formatDate} ) in {location}:\n' 
+    for mov in list(showsInfoDict.keys()):
+        for theater,screenings in list(showsInfoDict[mov].items()):
+            if screenings == [] or screenings =='':
+               showsInfoDict[mov].pop(theater)
+        if showsInfoDict[mov]=={} or showsInfoDict[mov]==None : 
+            showsInfoDict.pop(mov)
+
     for mov in showsInfoDict.keys():
-        res += mov + '\n :'
+        res +='\n' +'> '+ bold(moviesTitles[mov][0]) + ' - '+ str(moviesTitles[mov][1][0]) + '\n'
         for theater in showsInfoDict[mov].keys():
-            res += '\t--> ' + theater + ' --> '
-            res += ', '.join(list(map(lambda x: str(datetime.strptime(x["time"], "%Y-%m-%d %H:%M:%S").time()), showsInfoDict[mov][theater])))
-            res += '\n'
-        
-    return res
+            res += theater.replace('cinema','').replace('-',' ') +  '   ' + '  |  '.join(list(map(lambda x: str(datetime.strptime(x["time"], "%Y-%m-%d %H:%M:%S").strftime('%H:%M')), showsInfoDict[mov][theater])))  + '\n'
+            #tmp = '  |  '.join(list(map(lambda x: str(datetime.strptime(x["time"], "%Y-%m-%d %H:%M:%S").strftime('%H:%M')), showsInfoDict[mov][theater])))
+            #test += f"{bold(moviesTitles[mov][0])  : <10}{theater.replace('cinema','').replace('-',' ')} { tmp : >100}\n"
+            # print(f"Unpacked list: {*a,}")
+            
+    return [titleRequest,res]
+def bold(string):
+    return f"**{string}**"
+def cinemaOut(string):
+    return string.replace('cinema','').replace('-',' ')
+def hyperlink(string,url):
+    return '['+string+']'+'('+url+')'
 
+    # all_shows_zone = getShowsZone(location)
+    # all_shows = getAllShows()
+    # moviesTitles = {mov["slug"]:[mov["title"],mov["genres"]] for mov in all_shows} # 
+    # moviesSlugZone = { mov["slug"]:moviesTitles[mov["slug"]] for mov in all_shows_zone if mov["bookable"]}
 
+    # res = f'Movies available {time} ( {formatDate} ) in {location}:\n' 
+    # for slug, movietitle  in moviesSlugZone.items(): 
+    #     res += '  **'+movietitle+'**  '+ '\n' #pareil
+    # for slug, movieinfos in moviesSlugZone.items(): 
+    #     res += '  **'+str(movieinfos[0])+'**  '+ ' | ' + str(movieinfos[1][0])+   f'https://www.cinemaspathegaumont.com/films/{slug}'+ '\n' #pareil
+    # return res
+
+ 
 def MovieScreeningsTodayTomorrowLocation(namedGroups={}):
     movieName = (namedGroups.get("moviename4") if namedGroups.get("moviename4") is not None else "").rstrip()
     time = (namedGroups.get("time") if namedGroups.get("time") is not None else "").rstrip().lower()
     location = (namedGroups.get("location3") if namedGroups.get("location3") is not None else "").rstrip().lower()
     # avoid problems
     if movieName == "" or time == "" or location == "":
-        return None
+        return ["Error screenings today/tomorrow with a specific location" ," Bruhh ! You didn't specify a movie name or location and the day !(today | tomorrow)"]
 
     infos = getMovieInfos(apiSearch(movieName))
     if type(infos) == dict and "slug" in infos.keys():
@@ -486,28 +659,53 @@ def MovieScreeningsTodayTomorrowLocation(namedGroups={}):
     elif time == "tomorrow":
         formatDate = getTimeDate(1, "days")
     else:
-        return ""
+        return "" # C QUOI CE RETURN ANTOINE WESH 
     city = location.replace('é', 'e').replace(' ', '-')
     movieTheaters = CINEMA_DICT.get(city)
 
     showTimes = {
-        theater : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]] for res in getMovieShowtimes(slug, theater, date=formatDate)]
+        theater : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").strftime('%H:%M')), res["version"], res["refCmd"]] for res in getMovieShowtimes(slug, theater, date=formatDate)]
         for theater in movieTheaters
     }
 
     # Check if all cinemas does not project this movie
     hasShowTimes = False
-    for k, v in showTimes.items():
+    for k, v in list(showTimes.items()):
+        if v == []:
+            showTimes.pop(k)
         if v != []:
             hasShowTimes = True
             pass
 
     if hasShowTimes:
-        res = f'Screenings available for {movieName} {time} ( {formatDate} ) in {location}:\n'
-        res += '\n\n'.join([theater + '\n' + '\n'.join(['\t'.join(screen) for screen in showTimes[theater]]) for theater in showTimes.keys()])
-        return res
+        titleRequest = f'Screenings available for {movieName} in {time} ({formatDate}) in {location}:\n'
+        res = ""
+        for theater in showTimes.keys(): 
+            res += cinemaOut(theater) +'\n'
+            vost = []
+            vf = []
+    
+            for screen in showTimes[theater] : 
+                if screen[1]=='vost':
+                    vost.append([screen[0],screen[2]])
+   
+                if screen[1]=="vf"  : 
+                    vf.append([screen[0],screen[2]])
+
+            if len(vf) >=  1 : 
+                res += 'VF'
+                for v in vf : 
+                    res += ' '+ hyperlink(v[0],v[1])
+                res +='\n'
+            if len(vost) >= 1 : 
+                res +='VOST'
+                for vst in vost : 
+                    res += '  '+ hyperlink(vst[0],vst[1])
+                res +='\n'
+        return [titleRequest,res]
+        
     else:
-        return GetRecommendation(slug)
+        return ['Recommendations', GetRecommendation(slug)] # Hugo c'est quel type de recommendation ici ? 
 
 
 def MovieScreeningsDaysLocation(namedGroups={}):
@@ -517,7 +715,7 @@ def MovieScreeningsDaysLocation(namedGroups={}):
     detail = (namedGroups.get("detail") if namedGroups.get("detail") is not None else "").rstrip()
     # avoid problems
     if location == "" or detail == "" or movieName == "":
-        return None
+        return [' Error Screenings for a movie within X days and specific location',' Please verify your movie name, location and that days dont exceed 14 days forecast']
 
     infos = getMovieInfos(apiSearch(movieName))
     if type(infos) == dict and "slug" in infos.keys():
@@ -532,23 +730,51 @@ def MovieScreeningsDaysLocation(namedGroups={}):
     movieTheaters = CINEMA_DICT.get(city)
 
     showTimes = {
-        theater : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").time()), res["version"], res["refCmd"]] for res in getMovieShowtimes(slug, theater, date=formatDate)]
+        theater : [[str(datetime.strptime(res["time"], "%Y-%m-%d %H:%M:%S").strftime('%H:%M')), res["version"], res["refCmd"]] for res in getMovieShowtimes(slug, theater, date=formatDate)]
         for theater in movieTheaters
     }
 
     # Check if all cinemas does not project this movie
     hasShowTimes = False
-    for k, v in showTimes.items():
+    for k, v in list(showTimes.items()):
+        if v == []:
+            showTimes.pop(k)
         if v != []:
             hasShowTimes = True
             pass
     
     if hasShowTimes:
-        res = f'Screenings available for {movieName} in {date} days ( {formatDate} ) in {location}:\n'
-        res += '\n\n'.join([theater + '\n' + '\n'.join(['\t'.join(screen) for screen in showTimes[theater]]) for theater in showTimes.keys()])
-        return res
+        titleRequest = f'Screenings available for {movieName} in {date} days ({formatDate}) in {location}:\n'
+        res = ""
+   
+        for theater in showTimes.keys(): 
+            res += cinemaOut(theater) +'\n'
+            vost = []
+            vf = []
+    
+            for screen in showTimes[theater] : 
+                if screen[1]=='vost':
+                    vost.append([screen[0],screen[2]])
+   
+                if screen[1]=="vf"  : 
+                    vf.append([screen[0],screen[2]])
+
+            if len(vf) >=  1 : 
+                res += 'VF'
+                for v in vf : 
+                    res +=  '  '+ '['+v[0]+']' +'('+v[1] +')'
+                res +='\n'
+            if len(vost) >= 1 : 
+                res +='VOST'
+                for vst in vost : 
+                    res += '  '+'['+vst[0]+']' +'('+vst[1] +')'
+                res +='\n'
+        return [titleRequest,res]
+        
+
     else:
-        return GetRecommendation(slug)
+        return ["Recommendations",GetRecommendation(slug)]
+
 
 
 # Get the most liked movies actually on screen
@@ -556,7 +782,7 @@ def GetTrend(namedGroups={}, trending_index=15):
     check = (namedGroups.get("trend") if namedGroups.get("trend") is not None else "")
     # avoid problems
     if check == "":
-        return None
+        return ['Error trend',' I didnt find anythings ! ']
 
     all_movies = getAllShows()
     list_likes = []
@@ -570,9 +796,9 @@ def GetTrend(namedGroups={}, trending_index=15):
     list_likes.sort(reverse=True)
     trending = list_likes[:trending_index]
 
-    res = f'Current trending movies are :\n'
+    titleRequest = f'Current trending movies are :\n'
     res += '\n'.join(trending[i][1] + '\t' + 'with a like score of ' + str(trending[i][0]) for i in range(len(trending)))
-    return res
+    return [titleRequest,res]
 
 
 # Get a similarity score of all movies compared to one movie and return the most similar ones
@@ -626,11 +852,17 @@ def getTimeDate(nbDays, details):
 
   
 def ListGenres():
-    genres="Action  |  Animation  |  Aventure  |  Biopic  |  Comédie | Comédie dramatique  |  Comédie musicale  |  Comédie romantique  |  Court métrage  |  Divers | Documentaire  |  Drame  |  Drame psychologique  |  Famille  |  Fantastique | Film musical  |  Guerre  |  Historique  |  Horreur / Epouvante  |  Policier / Espionnage | Romance  |  Science Fiction  |  Thriller  |  Western"
-    str="** The Gaumont *genre* colllection** : \n\n"
+    genres= [
+        'Action', 'Animation', 'Aventure', 'Biopic', 'Comédie', 'Comédie dramatique',
+        'Comédie musicale', 'Comédie romantique', 'Court métrage', 'Divers', 'Documentaire', 'Drame',
+        'Drame psychologique', 'Famille', 'Fantastique', 'Film musical', 'Guerre', 'Historique',
+        'Horreur / Epouvante', 'Policier / Espionnage', 'Romance', 'Science Fiction', 'Thriller',  'Western'
+    ]
+    titleRequest="** The Gaumont *genre* colllection** : \n\n"
+    str =''
     for i in range(int(len(genres)/5+1)):
-        str+='  '.join(genres[i*5:(i+1)*5])+ "\n"  
-    return str
+        str+='  |  '.join(genres[i*5:(i+1)*5])+ "\n"  
+    return [titleRequest,'[like so.](https://example.com)']
 
 
     # shows = getAllShows()
@@ -643,16 +875,3 @@ def ListGenres():
     #     str+='  |  '.join(genres_sorted[i*5:(i+1)*5])+ "\n"  
     # return str
 
-
-    # str="**"
-    # for i in range(int(len(genres_sorted)/5+1)):
-    #     str+='**  |  **'.join(genres_sorted[i*5:(i+1)*5])+ "** \n **"  
-    # return str-'**'
-
-
-    # genres = [
-    #     str(show["genres"]) 
-    #     for show in shows 
-    #     if "Non défini" not in str(show["genres"])
-    # ]
-    # return '\n'.join(list(set(genres)))
