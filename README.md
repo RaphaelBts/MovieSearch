@@ -6,6 +6,7 @@ MovieSearch is a chatbot available on [Discord](https://discord.com) that will h
 - Finding information on a specific movie
 - Finding screenings of a specific movie near you
 - Finding the available screenings near you
+
 He will also recommend you some movies, based on what is popular today and on which movie you want to see.
 
 Based on **real-time data**, you will be able to easily find information you need and even book your tickets for your desired movie screening (if available of course).
