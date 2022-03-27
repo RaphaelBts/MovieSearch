@@ -65,14 +65,14 @@ patternList = [
         # done + tested + FORM
     },
     {
-        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*((of|for)(\sthe)?(\s(film|movie)?))\\s*(?P<moviename3>.*)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name4>[P-p]athé.*|[G-g]aumont.*)',
+        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*((of|for)(\\sthe)?(\\s(film|movie)?))\\s*(?P<moviename3>.*)\\s*in\\s*(?P<date>\\d*)\\s*(?P<detail>day(s)?)\\s*(at\\s*|in\\s*)?(?P<movie_theater_name4>[P-p]athé.*|[G-g]aumont.*)',
         'intent': 'Movie screening for movie ... in ... days in cinema ...' # authorized date : in x days (maximum 14 days) ya écrit max 14 days mais on check jamais ca 
         #upgraded fait de day 0 to day x...
         # done + tested  QUI A OSE DIRE TESTED YA VLA CONFLIT AVEC  LOCATION 4 faut rajouter un identifiant cinema optionnel  : screening for uncharted in 2 days in cinema alesia 
     },
     ##############################################################################################################
     {
-        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*((of|for)(\sthe)?(\s(film|movie)?))\\s*(?P<moviename4>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<location3>.*)',
+        'pattern':'(.*([M-m]ovie(s)?|[S-s]creening(s)?))\\s*((of|for)(\\sthe)?(\\s(film|movie)?))\\s*(?P<moviename4>.*)\\s*(?P<time>today|tomorrow)\\s*(at\\s*|in\\s*)?(?P<location3>.*)',
         'intent': 'Movie screening for movie ... today/tomorrow in ...' # date : today or tomorrow 
         # done + tested + FORM 
     },
