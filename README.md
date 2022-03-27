@@ -38,11 +38,11 @@ Movies played by Tom Holland
 ```
 Movies directed by Matt Reeves
 ```
-- **Recent movies**
+- **Movies coming soon**
 ```
-New movies
+Coming soon
 ```
-- **Movies of a certain genre** (example: Action)
+- **Movies of a certain genre** (example: Action) x
 ``` 
 Action movies
 ```
@@ -90,7 +90,7 @@ Screenings of Uncharted in 4 days in Pathe Boulogne
 
 ### 4. MovieSearch can recommand you movies:
 
-- **Most popular movies**
+- **Most popular movies** 
 ```
 Most popular movies
 ```
