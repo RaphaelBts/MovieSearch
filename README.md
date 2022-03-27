@@ -20,35 +20,7 @@ MovieSearch is based on a huge dataset, which is the Gaumont-Pathé API. Gaumont
 
 Use this link to join the server: https://discord.gg/v8Dxvde9TE 
 
-<br>You can communicate with the bot in the bot channel. 
-
-
-### Packages and libraries
-
-Packages to install : discord.py
-```
-pip install discord.py
-```
-pip install simple_colours
-pip install termcolor
-
-### Use movieSearch bot
-
-First, build the movieSearch package:
-```
-pip install -e .
-```
-
-Then, run the bot with
-```
-python bot.py
-```
-or
-```
-python3 bot.py
-```
-
-Once the bot is connected, challenge him up !
+<br>You can communicate with the bot in the bot channel.
 
 
 ## What can MovieSearch do ? 
@@ -124,7 +96,7 @@ Most popular movies
 ```
 - **If the movie you are looking for is not screening anymore, MovieSearch will recommend you movies that are most similar with it**
 ```
-Example here
+Screening for 30 jours max today in angers
 ```
 
 
