@@ -116,6 +116,17 @@ Screenings of Uncharted tomorrow in Pathe Boulogne
 Screenings of Uncharted in 4 days in Pathe Boulogne
 ```
 
+### 4. MovieSearch can recommand you movies:
+
+- **Most popular movies**
+```
+Most popular movies
+```
+- **If the movie you are looking for is not screening anymore, MovieSearch will recommend you movies that are most similar with it**
+```
+Example here
+```
+
 
 ## Client use cases 
 
@@ -124,10 +135,10 @@ We can define some use cases that a user may use, while using movieSearch bot:
 If the user know the name of the movie he wants to watch, he will probably be in the use case 1.
 >   1) Movie info &rarr; Screenings (today // tomorrow // in x days) in (city // movie theater)
 
-If the user is looking for a movie, based of its genre, he will probably be in the use case 2.
+If the user is looking for a movie, based on its genre, he will probably be in the use case 2.
 >   2) Genres list &rarr; Movies by genre &rarr; Use case 1
 
-If the user is looking for a movie, based of its actor or director, he will probably be in the use case 3.
+If the user is looking for a movie, based on its actor or director, he will probably be in the use case 3.
 >   3) Movies by (actor // directors) &rarr; Use case 1
 
 If the user is looking for all movies available near him, he will probably be in the use case 4.
@@ -136,6 +147,6 @@ If the user is looking for all movies available near him, he will probably be in
 If the user is looking for all the screening available near him, he will probably be in the use case 5
 >   5) All screenings (today // tomorrow // in x days) in (city // movie theater)
 
-If the user is looking for trendings movies, he will probably be in the use case 6.
+If the user is looking for trending movies, he will probably be in the use case 6.
 >   6) Trends movies &rarr; Use case 1
 
