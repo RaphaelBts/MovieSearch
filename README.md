@@ -42,7 +42,7 @@ Movies directed by Matt Reeves
 ```
 Coming soon
 ```
-- **Movies of a certain genre** (example: Action) x
+- **Movies of a certain genre** (example: Action)
 ``` 
 Action movies
 ```
