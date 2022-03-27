@@ -107,11 +107,11 @@ patternList = [
         # done  mise en forme quasi done
     },
     {
-        'pattern':'.*\\s*(list(s)?\\s*of\\s*genre(s)?)\\s*.*',
+        'pattern':'.*\\s*([L-l]ist(s)?\\s*of\\s*genre(s)?)\\s*.*',
         'intent': 'List of genres'
     },   #done mise en forme quasi done 
     {
-        'pattern':'(?P<type>\\w+)([F-f]ilm(s)?|[M-m]ovie(s)?)',
+        'pattern':'(?P<type>\\w+)\\s([F-f]ilm(s)?|[M-m]ovie(s)?)',
         'intent': 'Movie by type'
         # done 
     }
