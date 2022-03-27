@@ -3,12 +3,12 @@ patternList = [
     {
         'pattern' : '\\b(?P<greeting>[H-h]i|[H-h]ello|[H-h]ey|[G-g]ood morning|[G-g]ood afternoon)\\b',
         'intent' : 'Hello'
-        # done + tested
+        # Over
     }, 
     {
         'pattern' :'\\b(bye|exit|finish|end|stop)\\b',
         'intent' : 'Exit'
-        # done + tested : changer le messagee c'est tout
+        #Over
     },
     {
         'pattern' : '\\b([H-h]elp(s)?|Aide(s)?|Command(s)?)\\b',
@@ -19,7 +19,7 @@ patternList = [
     {
         'pattern': '(.*[I-i]nfo(s)?|[I-i]nformation(s)?)\\s(about|on)\\s(the\\s(film(s)?|movie(s)?)\\s)?(?P<moviename1>\\w+(\\s\\w+)*)',
         'intent': 'Movie info'
-        # done + tested + quasi form 
+        # over 
     },
     {
         'pattern':'.*(?P<greeting>[F-f]ilm(s)?|[M-m]ovie(s)?)\\s(with|play by|played by)\\s?(the\\sactor)?\\s(Mr|Mrs)?(\\.)?(?P<actor>.*)',
