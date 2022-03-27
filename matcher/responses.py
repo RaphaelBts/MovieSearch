@@ -75,11 +75,13 @@ def MoviebyGenre(genre):
     all_shows = getAllShows()
 
     movies = [mov for mov in all_shows if genre in mov["genres"]]
-    movieTitles = [mov["title"] for mov in movies]
+    movieTitles = [[mov["title"],mov['slug']]for mov in movies]
     
     titleRequest = "List of movies by genre"
     res = 'Movies by genre ' + genre + ':\n'
-    content = res + '\n'.join(movieTitles) 
+    for elem in movieTitles : 
+         content = res + '\n'+ hyperlink(elem[0],elem[1])
+    
     return [titleRequest, content]
 
 def NewMovies(new=7):
