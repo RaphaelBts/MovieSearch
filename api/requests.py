@@ -13,7 +13,7 @@ def apiSearch(search):
     return bestMatch
 
 
-def getAnimeInfos(animeId ):
+def getAnimeInfos(animeId,api=api):
     url = f'{api}/anime/{animeId}'
     res = scrappe(url)
     return res
@@ -24,7 +24,8 @@ def getAllAnimes():
     res = scrappe(url)
     return res["shows"]
 
-
+print(getAnimeInfos(10500))
+print("merde")
 
 
 
